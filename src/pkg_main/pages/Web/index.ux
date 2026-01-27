@@ -1,0 +1,36 @@
+<template>
+  <div class="web-container">
+    <web src="{{pageUrl}}" class="web-view" trustedurl="['https://api.51dsp.cn']"></web>
+  </div>
+</template>
+
+<script>
+export default {
+  data: {
+    url: '',
+    title: '',
+    pageUrl: ''
+  },
+  onInit() {
+    console.log('Web页面收到参数 url:', this.url, 'title:', this.title)
+    this.pageUrl = this.url || ''
+    if (this.title) {
+      this.$page.setTitleBar({ text: this.title })
+    }
+    console.log('Web页面设置 pageUrl:', this.pageUrl)
+  }
+}
+</script>
+
+<style>
+.web-container {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.web-view {
+  width: 100%;
+  height: 100%;
+}
+</style>

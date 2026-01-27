@@ -1,0 +1,153 @@
+<import name="quweiceping-page" src="./quweiceping.ux"></import>
+<import name="kantuceping-page" src="./kantuceping.ux"></import>
+<import name="shenghuochangshi-page" src="./shenghuochangshi.ux"></import>
+<import name="mine-page" src="./mine.ux"></import>
+
+<template>
+  <div class="main-page">
+    <tabs class="tabs" onchange="changeTab" index="{{currentIndex}}">
+      <tab-content class="tab-content">
+        <quweiceping-page
+          id="quweiceping-page"
+          is-active="{{currentIndex === 0}}"
+        ></quweiceping-page>
+        <kantuceping-page
+          id="kantuceping-page"
+          is-active="{{currentIndex === 1}}"
+        ></kantuceping-page>
+        <shenghuochangshi-page
+          id="shenghuochangshi-page"
+          is-active="{{currentIndex === 2}}"
+        ></shenghuochangshi-page>
+        <mine-page
+          id="mine-page"
+          is-active="{{currentIndex === 3}}"
+        ></mine-page>
+      </tab-content>
+    </tabs>
+
+    <div class="tab-bar">
+      <div class="tab-item" onclick="clickTab(0)">
+        <image
+          class="tab-icon"
+          src="{{currentIndex === 0 ? '/assets/img/ceping-s.png' : '/assets/img/ceping-u.png'}}"
+        ></image>
+        <text
+          class="tab-text"
+          style="color: {{currentIndex === 0 ? '#FFFFFF' : '#999999'}}"
+          >趣味测评</text
+        >
+      </div>
+      <div class="tab-item" onclick="clickTab(1)">
+        <image
+          class="tab-icon"
+          src="{{currentIndex === 1 ? '/assets/img/kantu-s.png' : '/assets/img/kantu-u.png'}}"
+        ></image>
+        <text
+          class="tab-text"
+          style="color: {{currentIndex === 1 ? '#FFFFFF' : '#999999'}}"
+          >看图测评</text
+        >
+      </div>
+      <div class="tab-item" onclick="clickTab(2)">
+        <image
+          class="tab-icon"
+          src="{{currentIndex === 2 ? '/assets/img/changshi-s.png' : '/assets/img/changshi-u.png'}}"
+        ></image>
+        <text
+          class="tab-text"
+          style="color: {{currentIndex === 2 ? '#FFFFFF' : '#999999'}}"
+          >生活常识</text
+        >
+      </div>
+      <div class="tab-item" onclick="clickTab(3)">
+        <image
+          class="tab-icon"
+          src="{{currentIndex === 3 ? '/assets/img/mine-s.png' : '/assets/img/mine-u.png'}}"
+        ></image>
+        <text
+          class="tab-text"
+          style="color: {{currentIndex === 3 ? '#FFFFFF' : '#999999'}}"
+          >我的</text
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { initUser } from '../../helper/init.js'
+
+export default {
+  private: {
+    currentIndex: 0
+  },
+  onInit() {
+    console.log('Main page initialized')
+    // 进入应用时发送初始化请求
+    initUser()
+  },
+  onShow() {
+    console.log('Main page shown, currentIndex:', this.currentIndex)
+  },
+  changeTab(e) {
+    this.currentIndex = e.index
+    console.log('Tab changed to:', this.currentIndex)
+  },
+  clickTab(index) {
+    this.currentIndex = index
+    console.log('Tab clicked:', index)
+  }
+}
+</script>
+
+<style>
+.main-page {
+  flex-direction: column;
+  background-color: #ffffff;
+  height: 100%;
+}
+
+.tabs {
+  flex: 1;
+}
+
+.tab-content {
+  flex: 1;
+}
+
+.tab-bar {
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  height: 48px;
+  background-color: #1a1a1a;
+  border-radius: 24px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.tab-item {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-bottom: 2px;
+}
+
+.tab-text {
+  font-size: 8px;
+}
+</style>

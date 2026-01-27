@@ -1,0 +1,31 @@
+{
+  "app": {
+    "name": "宁悦测评"
+  },
+  "tabs": {
+    "quweiceping": "趣味测评",
+    "kantuceping": "看图测评",
+    "shenghuochangshi": "生活常识",
+    "mine": "我的"
+  },
+  "splash": {
+    "title": "用户协议及隐私政策",
+    "welcome": "尊敬的用户：欢迎使用"宁悦测评"，在使用前请仔细阅读",
+    "privacy": "《隐私政策》",
+    "agreement": "《用户协议》",
+    "description": "，我们将严格遵守您同意的各项条款使用您的信息，以便为您提供更好的服务。点击"同意"意味着您自愿遵守《隐私政策》，我们将严格保护您的个人信息，确保信息安全。",
+    "agree": "同意并继续",
+    "disagree": "不同意"
+  },
+  "mine": {
+    "username": "用户名",
+    "records": "我的测评记录",
+    "settings": "设置",
+    "about": "关于我们"
+  },
+  "common": {
+    "loading": "加载中...",
+    "confirm": "确定",
+    "cancel": "取消"
+  }
+}

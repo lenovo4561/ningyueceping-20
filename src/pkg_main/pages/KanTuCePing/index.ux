@@ -1,0 +1,137 @@
+<template>
+  <div class="page_container">
+    <div class="content">
+      <image class="bg_image" src="/assets/img/kantuceping-bg.png"></image>
+      <div class="title_area">
+        <text class="title">看图测评</text>
+      </div>
+      <!-- 内容区域，可以添加更多内容 -->
+    </div>
+
+    <!-- 底部导航栏 -->
+    <v-tabs
+      current-index="{{currentIndex}}"
+      tab-bar="{{tabBar}}"
+      @change-current-index="_changeCurrentIndex"
+    ></v-tabs>
+  </div>
+</template>
+
+<!-- 引入底部导航栏组件 -->
+<import name="v-tabs" src="../../components/tab/index.ux"></import>
+
+<script>
+import router from '@system.router'
+
+export default {
+  data() {
+    return {
+      currentIndex: 1, // 当前选中的标签索引
+      tabBar: {
+        color: '#999999',
+        active_color: '#FFFFFF',
+        tabs: [
+          {
+            title: '趣味测评',
+            default_icon: '/assets/img/ceping-u.png',
+            active_icon: '/assets/img/ceping-s.png'
+          },
+          {
+            title: '看图测评',
+            default_icon: '/assets/img/kantu-u.png',
+            active_icon: '/assets/img/kantu-s.png'
+          },
+          {
+            title: '生活常识',
+            default_icon: '/assets/img/changshi-u.png',
+            active_icon: '/assets/img/changshi-s.png'
+          },
+          {
+            title: '我的',
+            default_icon: '/assets/img/mine-u.png',
+            active_icon: '/assets/img/mine-s.png'
+          }
+        ]
+      }
+    }
+  },
+
+  onInit() {
+    console.log('<<< 看图测评页面初始化，currentIndex:', this.currentIndex)
+  },
+
+  onShow() {
+    console.info('看图测评页面显示')
+  },
+
+  _changeCurrentIndex(evt) {
+    let index = evt.detail
+    console.info('切换到第' + index + '个标签')
+
+    // 如果点击的是"趣味测评"标签（index === 0），跳转到趣味测评页面
+    if (index === 0) {
+      console.log('点击趣味测评导航，跳转到QuWeiCePing页面')
+      router.replace({
+        uri: '/pkg_main/pages/QuWeiCePing'
+      })
+      return
+    }
+
+    // 如果点击的是"生活常识"标签（index === 2），跳转到生活常识页面
+    if (index === 2) {
+      console.log('点击生活常识导航，跳转到ShengHuoChangShi页面')
+      router.replace({
+        uri: '/pkg_main/pages/ShengHuoChangShi'
+      })
+      return
+    }
+
+    // 如果点击的是"我的"标签（index === 3），跳转到Mine页面
+    if (index === 3) {
+      console.log('点击我的导航，跳转到Mine页面')
+      router.replace({
+        uri: '/pkg_main/pages/Mine'
+      })
+      return
+    }
+
+    // 当前页面(看图测评)不做跳转
+    this.currentIndex = index
+  }
+}
+</script>
+
+<style>
+.page_container {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.content {
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
+}
+
+.bg_image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.title_area {
+  width: 100%;
+  padding: 20px;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+}
+</style>

@@ -1,0 +1,86 @@
+<template>
+  <div class="footer menu_wrap">
+    <block if="{{tabBar.tabs}}" for="(index, item) in tabBar.tabs">
+      <div class="menu-item" onclick="clickHandler" data-index="{{index}}">
+        <image
+          class="icon"
+          src="{{ currentIndex === index ? item.active_icon : item.default_icon }}"
+        ></image>
+        <div class="title">
+          <text
+            style="color:{{currentIndex === index ? tabBar.active_color : tabBar.color }}"
+            >{{ item.title }}</text
+          >
+        </div>
+      </div>
+    </block>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    tabBar: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    currentIndex: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {}
+  },
+  clickHandler(evt) {
+    // 兼容处理：优先使用 currentTarget 获取绑定事件元素上的属性
+    const attr = (evt.currentTarget && evt.currentTarget.attr) || (evt.target && evt.target.attr) || {};
+    const index = attr.dataIndex !== undefined ? attr.dataIndex : attr.dataindex;
+
+    console.log('点击导航栏，索引:', index)
+    if (index !== undefined && index !== null) {
+      this.$emit('changeCurrentIndex', parseInt(index))
+    }
+  },
+  onInit() {}
+}
+</script>
+
+<style>
+.menu_wrap {
+  height: 48px;
+  position: fixed;
+  z-index: 1000;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background-color: #1a1a1a;
+  border-radius: 24px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.menu-item {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.menu-item .icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-bottom: 2px;
+}
+
+.menu-item .title text {
+  font-size: 8px;
+}
+</style>

@@ -1,0 +1,231 @@
+<template>
+  <div class="page-container">
+    <!-- 顶部背景 -->
+    <div class="top-section">
+      <image class="top-bg-img" src="/assets/img/shouyedingbg-5.png"></image>
+      <div class="header-overlay">
+        <div class="navbar">
+          <div class="nav-back_btn" onclick="goBack">
+            <image src="/assets/img/back.png" class="back-icon"></image>
+          </div>
+          <text class="nav-title">答题测试</text>
+          <div class="nav-placeholder"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 结果内容 -->
+    <div class="result-content">
+      <div class="result-card">
+        <text class="main-tip">你已完成全部答题，明天再来吧~</text>
+
+        <text class="score-label">本次答题正确率</text>
+
+        <div class="score-container">
+          <text class="score-number">{{ displayScore }}</text>
+          <text class="score-percent">%</text>
+        </div>
+
+        <image class="result-image" src="/assets/img/gongxi.png"></image>
+      </div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <div class="bottom-area">
+      <div class="btn-primary" onclick="goHome">
+        <text class="btn-text">返回首页</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  // 接收页面参数
+  protected: {
+    score: 0,
+    correctCount: 0,
+    totalCount: 0
+  },
+  // 内部数据
+  private: {
+    displayScore: 0
+  },
+
+  onInit() {
+    // 确保分数正常显示
+    const s = parseInt(this.score)
+    this.displayScore = isNaN(s) ? 0 : s
+    console.info(
+      'Result Page onInit. Score:',
+      this.score,
+      'Display:',
+      this.displayScore
+    )
+  },
+
+  goBack() {
+    router.push({ uri: 'pkg_main/pages/Main/index' })
+  },
+
+  goHome() {
+    router.push({ uri: 'pkg_main/pages/Main/index' })
+  }
+}
+</script>
+
+<style>
+.page-container {
+  flex-direction: column;
+  background-color: #f5f7fa;
+  height: 100%;
+}
+
+.top-section {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.top-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.header-overlay {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.navbar {
+  width: 100%;
+  height: 50px;
+  padding-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-back_btn {
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.nav-title {
+  font-size: 18px;
+  color: #171717;
+  font-weight: bold;
+}
+
+.nav-placeholder {
+  width: 30px;
+}
+
+.result-content {
+  flex-direction: column;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  /* 让中间区域自适应，但不要强制压缩内部 */
+  flex: 1;
+}
+
+.result-card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 40px 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* 不使用 flex: 1 防止被压缩，让内容决定高度，或者给个最小高度 */
+}
+
+.main-tip {
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.score-label {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 5px;
+}
+
+.score-container {
+  flex-direction: row;
+  align-items: baseline;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.score-number {
+  font-size: 80px;
+  color: #00d3ff;
+  font-weight: bold;
+  font-family: sans-serif;
+  line-height: 80px;
+}
+
+.score-percent {
+  font-size: 30px;
+  color: #00d3ff;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.result-image {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.bottom-area {
+  width: 100%;
+  padding: 20px 30px 30px 30px;
+  background-color: #f5f7fa;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 50px;
+  background-color: #00d3ff;
+  border-radius: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-text {
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: bold;
+}
+</style>

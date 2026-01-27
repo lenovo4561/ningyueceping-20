@@ -1,11 +1,35 @@
 <template>
   <div class="page_container">
     <div class="content">
+      <!-- 顶部背景图 -->
       <image class="bg_image" src="/assets/img/shenghuochangshi-bg.png"></image>
-      <div class="title_area">
-        <text class="title">生活常识</text>
+
+      <!-- 内容层，覆盖在背景之上 -->
+      <div class="main_content">
+        <!-- 答题记录卡片 -->
+        <div class="stat_card">
+          <text class="stat_title">答题记录</text>
+          <div class="stat_row">
+            <div class="stat_item">
+              <text class="stat_num">0</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+            <div class="stat_item stat_item_middle">
+              <text class="stat_num">67%</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+            <div class="stat_item">
+              <text class="stat_num">32</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+          </div>
+        </div>
+
+        <!-- 开始答题按钮 -->
+        <div class="start_btn" onclick="startQuiz">
+          <text class="start_text">开始答题</text>
+        </div>
       </div>
-      <!-- 内容区域，可以添加更多内容 -->
     </div>
 
     <!-- 底部导航栏 -->
@@ -22,6 +46,7 @@
 
 <script>
 import router from '@system.router'
+import prompt from '@system.prompt'
 
 export default {
   data() {
@@ -62,6 +87,12 @@ export default {
 
   onShow() {
     console.info('生活常识页面显示')
+  },
+
+  startQuiz() {
+    router.push({
+      uri: 'pkg_main/pages/ShengHuoChangShi/Quiz'
+    })
   },
 
   _changeCurrentIndex(evt) {
@@ -106,7 +137,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: #f7f9fc;
 }
 
 .content {
@@ -114,19 +145,94 @@ export default {
   flex-direction: column;
   width: 100%;
   align-items: center;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
+  position: relative; /* 为了bg定位 */
 }
 
 .bg_image {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 500px; /* 大概占满上半部分 */
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.title_area {
+.main_content {
   width: 100%;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 420px; /* 根据背景图人物位置调整，确保卡片显示在人物下方 */
+  flex-direction: column;
   align-items: center;
+}
+
+/* 统计卡片 */
+.stat_card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  /* 阴影效果在快应用中支持有限，主要靠背景色和圆角 */
+}
+
+.stat_title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+.stat_row {
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.stat_item {
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  background-color: #e0fbfd;
+  border-radius: 8px;
+  padding: 15px 5px;
+  margin: 0 5px;
+  border: 1px solid #00d3ff;
+}
+
+.stat_item_middle {
+  /* 中间可能特殊样式，暂时不需要 */
+}
+
+.stat_num {
+  font-size: 28px;
+  color: #000000;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.stat_label {
+  font-size: 10px;
+  color: #666666;
+}
+
+/* 开始按钮 */
+.start_btn {
+  width: 100%;
+  height: 54px;
+  background-color: #00d3ff;
+  border-radius: 27px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 80px; /* 防止被底部导航遮挡 */
+}
+
+.start_text {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .title {

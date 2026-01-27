@@ -1,102 +1,158 @@
 <template>
   <div class="page_container">
-    <div class="content">
-      <image class="bg_image" src="/assets/img/kantuceping-bg.png"></image>
-      <div class="title_area">
-        <text class="title">看图测评</text>
+    <!-- 顶部固定区域 -->
+    <div class="top_area">
+      <image class="top_bg" src="/assets/img/tupianceshi-bg.png"></image>
+
+      <!-- 导航栏 -->
+      <div class="navbar">
+        <div class="back_btn" onclick="goBack">
+          <image class="back_icon" src="/assets/img/back.png"></image>
+        </div>
+        <text class="page_title">图片测试</text>
       </div>
-      <!-- 内容区域，可以添加更多内容 -->
+
+      <!-- 装饰人物图 -->
+      <image class="character_img" src="/assets/img/character_cow.png"></image>
     </div>
 
-    <!-- 底部导航栏 -->
-    <v-tabs
-      current-index="{{currentIndex}}"
-      tab-bar="{{tabBar}}"
-      @change-current-index="_changeCurrentIndex"
-    ></v-tabs>
+    <!-- 序号 Badge -->
+    <div class="badge_wrapper">
+      <!-- 模仿截图中的题目区域头部 -->
+      <div class="question_header_row">
+        <image class="q_icon" src="/assets/img/question_mark.png"></image>
+        <text class="question_title_text">{{ quizTitle }}</text>
+      </div>
+    </div>
+
+    <!-- 主要内容区域 (进度条 + 题目图片 + 选项) -->
+    <div class="content_card">
+      <div class="progress_area">
+        <text class="progress_text"
+          ><span style="color:#ff7500; font-weight:bold;">1</span>/1</text
+        >
+        <div class="progress_bar_bg">
+          <div class="progress_bar_fill"></div>
+        </div>
+      </div>
+
+      <text class="question_desc">{{ currentQuestion.question }}</text>
+
+      <!-- 题目图片 -->
+      <div class="question_img_wrapper">
+        <image
+          class="question_img"
+          src="/assets/img/kantu_placeholder.png"
+        ></image>
+        <div class="img_placeholder_text">
+          <text class="placeholder_label">图片占位符</text>
+        </div>
+      </div>
+
+      <!-- 选项列表 -->
+      <div class="options_list">
+        <div
+          class="option_item {{selectedOptionIndex === index ? 'option_selected' : ''}}"
+          for="{{(index, option) in currentQuestion.options}}"
+          onclick="selectOption(index)"
+        >
+          <text class="option_text">{{ option.label }}.{{ option.text }}</text>
+        </div>
+      </div>
+
+      <!-- 底部确认按钮 -->
+      <div class="confirm_btn_wrapper">
+        <div class="confirm_btn" onclick="onConfirm">
+          <text class="confirm_text">查看结果</text>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<!-- 引入底部导航栏组件 -->
-<import name="v-tabs" src="../../components/tab/index.ux"></import>
-
 <script>
 import router from '@system.router'
+import prompt from '@system.prompt'
+import { imageQuizData } from '../../../helper/kantu.js'
 
 export default {
-  data() {
-    return {
-      currentIndex: 1, // 当前选中的标签索引
-      tabBar: {
-        color: '#999999',
-        active_color: '#FFFFFF',
-        tabs: [
-          {
-            title: '趣味测评',
-            default_icon: '/assets/img/ceping-u.png',
-            active_icon: '/assets/img/ceping-s.png'
-          },
-          {
-            title: '看图测评',
-            default_icon: '/assets/img/kantu-u.png',
-            active_icon: '/assets/img/kantu-s.png'
-          },
-          {
-            title: '生活常识',
-            default_icon: '/assets/img/changshi-u.png',
-            active_icon: '/assets/img/changshi-s.png'
-          },
-          {
-            title: '我的',
-            default_icon: '/assets/img/mine-u.png',
-            active_icon: '/assets/img/mine-s.png'
-          }
-        ]
+  protected: {
+    id: 0
+  },
+  private: {
+    quizTitle: '',
+    currentQuestion: {},
+    selectedOptionIndex: -1,
+    quizItem: null,
+    questionImage: ''
+  },
+  onInit() {
+    console.info('KanTu Detail Page Init, ID:', this.id)
+    this.initData()
+  },
+  initData() {
+    const quizId = parseInt(this.id) || 1
+    this.quizItem = imageQuizData.find(item => item.id === quizId)
+
+    if (this.quizItem) {
+      this.quizTitle = this.quizItem.title
+      this.currentQuestion = {
+        question: this.quizItem.question,
+        options: this.quizItem.options
+      }
+
+      if (quizId === 3) {
+        this.questionImage = '/assets/img/kantu_stars.png'
+      } else {
+        this.questionImage = '/assets/img/kantu_q' + quizId + '.png'
+      }
+    } else {
+      if (imageQuizData && imageQuizData.length > 0) {
+        this.quizItem = imageQuizData[0]
+        this.quizTitle = this.quizItem.title
+        this.currentQuestion = {
+          question: this.quizItem.question,
+          options: this.quizItem.options
+        }
       }
     }
   },
-
-  onInit() {
-    console.log('<<< 看图测评页面初始化，currentIndex:', this.currentIndex)
+  goBack() {
+    router.back()
   },
-
-  onShow() {
-    console.info('看图测评页面显示')
+  selectOption(index) {
+    this.selectedOptionIndex = index
   },
-
-  _changeCurrentIndex(evt) {
-    let index = evt.detail
-    console.info('切换到第' + index + '个标签')
-
-    // 如果点击的是"趣味测评"标签（index === 0），跳转到趣味测评页面
-    if (index === 0) {
-      console.log('点击趣味测评导航，跳转到QuWeiCePing页面')
-      router.replace({
-        uri: '/pkg_main/pages/QuWeiCePing'
+  onConfirm() {
+    if (this.selectedOptionIndex === -1) {
+      prompt.showToast({
+        message: '请选择一个选项'
       })
       return
     }
 
-    // 如果点击的是"生活常识"标签（index === 2），跳转到生活常识页面
-    if (index === 2) {
-      console.log('点击生活常识导航，跳转到ShengHuoChangShi页面')
-      router.replace({
-        uri: '/pkg_main/pages/ShengHuoChangShi'
-      })
-      return
+    const currentOption = this.currentQuestion.options[this.selectedOptionIndex]
+    const label = currentOption.label
+
+    let resultDesc = ''
+    if (this.quizItem.conclusions) {
+      const conclusion = this.quizItem.conclusions.find(c => c.label === label)
+      if (conclusion) {
+        resultDesc = conclusion.description
+      }
     }
 
-    // 如果点击的是"我的"标签（index === 3），跳转到Mine页面
-    if (index === 3) {
-      console.log('点击我的导航，跳转到Mine页面')
-      router.replace({
-        uri: '/pkg_main/pages/Mine'
-      })
-      return
+    if (!resultDesc) {
+      resultDesc = '暂无详细结论'
     }
 
-    // 当前页面(看图测评)不做跳转
-    this.currentIndex = index
+    router.replace({
+      uri: '/pkg_main/pages/KanTuCePing/result',
+      params: {
+        description: resultDesc,
+        quizId: this.id
+      }
+    })
   }
 }
 </script>
@@ -104,34 +160,216 @@ export default {
 <style>
 .page_container {
   flex-direction: column;
+  background-color: #f7f9fc;
+}
+
+.top_area {
+  width: 100%;
+  height: 180px;
+  position: relative;
+}
+
+.top_bg {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
-}
-
-.content {
-  flex: 1;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
-}
-
-.bg_image {
-  width: 100%;
-  height: 200px;
   object-fit: cover;
 }
 
-.title_area {
+.navbar {
+  position: absolute;
+  top: 15px;
+  left: 0;
   width: 100%;
-  padding: 20px;
+  height: 30px;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 10;
+  justify-content: center;
+}
+
+.back_btn {
+  position: absolute;
+  left: 15px;
+  width: 26px;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 13px;
+}
+
+.back_icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.page_title {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold;
+  lines: 1;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.character_img {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  width: 100px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.badge_wrapper {
+  margin-top: -80px;
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  flex-direction: row;
   align-items: center;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
+.question_header_row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.q_icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+
+.question_title_text {
+  font-size: 13px;
   color: #333333;
+  font-weight: bold;
+  flex: 1;
+}
+
+.content_card {
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 16px;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.progress_area {
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.progress_text {
+  font-size: 14px;
+  color: #999999;
+  margin-right: 10px;
+}
+
+.progress_bar_bg {
+  flex: 1;
+  height: 6px;
+  background-color: #ffe0c2;
+  border-radius: 3px;
+}
+
+.progress_bar_fill {
+  width: 50%;
+  height: 100%;
+  background-color: #ff7500;
+  border-radius: 3px;
+}
+
+.question_desc {
+  font-size: 12px;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 12px;
+  line-height: 20px;
+}
+
+.question_img_wrapper {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  margin-bottom: 20px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.question_img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.img_placeholder_text {
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder_label {
+  font-size: 16px;
+  color: #999999;
+  font-weight: 500;
+}
+
+.options_list {
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.option_item {
+  width: 100%;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 12px;
+  border: 1px solid #f7f7f7;
+}
+
+.option_text {
+  font-size: 10px;
+  color: #666666;
+}
+
+.option_selected {
+  background-color: #e0fbfd;
+  border: 1px solid #00d3ff;
+}
+
+.confirm_btn_wrapper {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm_btn {
+  width: 100%;
+  height: 48px;
+  background-color: #00d3ff;
+  border-radius: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm_text {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
 }
 </style>

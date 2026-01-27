@@ -56,7 +56,25 @@
       "pkg_main/pages/Main": {
         "component": "index"
       },
+      "pkg_main/pages/QuWeiCePing": {
+        "component": "index"
+      },
+      "pkg_main/pages/QuWeiCePing/result": {
+        "component": "index"
+      },
+      "pkg_main/pages/KanTuCePing": {
+        "component": "index"
+      },
+      "pkg_main/pages/KanTuCePing/result": {
+        "component": "index"
+      },
       "pkg_main/pages/Web": {
+        "component": "index"
+      },
+      "pkg_main/pages/ShengHuoChangShi/Quiz": {
+        "component": "index"
+      },
+      "pkg_main/pages/ShengHuoChangShi/Result": {
         "component": "index"
       },
       "pages/Demo": {
@@ -81,8 +99,36 @@
         "menu": false,
         "titleBar": false
       },
+      "pkg_main/pages/QuWeiCePing": {
+        "titleBarText": "趣味测评",
+        "menu": false,
+        "titleBar": false
+      },
+      "pkg_main/pages/QuWeiCePing/result": {
+        "titleBarText": "测评结论",
+        "menu": false,
+        "titleBar": false
+      },
+      "pkg_main/pages/KanTuCePing": {
+        "titleBarText": "图片测评",
+        "menu": false,
+        "titleBar": false
+      },
+      "pkg_main/pages/KanTuCePing/result": {
+        "titleBarText": "测评结论",
+        "menu": false,
+        "titleBar": false
+      },
       "pkg_main/pages/Web": {
         "titleBarText": "详情",
+        "menu": false
+      },
+      "pkg_main/pages/ShengHuoChangShi/Quiz": {
+        "titleBar": false,
+        "menu": false
+      },
+      "pkg_main/pages/ShengHuoChangShi/Result": {
+        "titleBar": false,
         "menu": false
       },
       "pages/Demo": {

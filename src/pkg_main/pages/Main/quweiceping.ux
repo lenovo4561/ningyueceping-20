@@ -1,16 +1,84 @@
 <template>
   <div class="page_container">
-    <div class="content">
-      <image class="bg_image" src="/assets/img/quweiceping-bg.png"></image>
-      <div class="title_area">
-        <text class="title">趣味测评</text>
-      </div>
-      <!-- 内容区域，可以添加更多内容 -->
-    </div>
+    <list class="scroll_container">
+      <!-- 顶部背景区域 -->
+      <list-item type="header" class="header_item">
+        <div class="header_wrapper">
+          <!-- 背景图 -->
+          <div class="bg_container">
+            <image
+              class="bg_image"
+              src="/assets/img/quweiceping-bg.png"
+            ></image>
+          </div>
+
+          <!-- 热门测评标题栏（带雾化效果） -->
+          <div class="hot_header_wrapper">
+            <div class="hot_header_stack">
+              <!-- 模糊层 -->
+              <div class="blur_layer"></div>
+              <!-- 白色渐变遮罩 -->
+              <div class="frost_overlay"></div>
+              <!-- 标题内容 -->
+              <div class="hot_header">
+                <image
+                  class="hot_icon"
+                  src="/assets/img/remenceping.png"
+                ></image>
+                <image class="hot_text_img" src="/assets/img/rmcp.png"></image>
+              </div>
+            </div>
+          </div>
+        </div>
+      </list-item>
+
+      <!-- 测评列表项 -->
+      <list-item
+        type="quiz_item"
+        class="quiz_item_wrapper"
+        for="{{(index, item) in quizList}}"
+      >
+        <div class="item_content">
+          <!-- 左侧图片占位 -->
+          <div class="item_left">
+            <image
+              class="item_img"
+              src="/assets/img/placeholder.png"
+              alt=""
+            ></image>
+            <div class="img_placeholder" if="{{!hasPlaceholder}}"></div>
+          </div>
+
+          <!-- 右侧内容 -->
+          <div class="item_right">
+            <text class="item_title">{{ item.title }}</text>
+
+            <div class="item_bottom_row">
+              <div class="item_info">
+                <image class="people_icon" src="/assets/img/renshu.png"></image>
+                <text class="people_count"
+                  >{{ item.peopleCount }} 人在测试</text
+                >
+              </div>
+
+              <div class="action_btn" onclick="startTest(item)">
+                <text class="btn_text">去测试</text>
+              </div>
+            </div>
+          </div>
+        </div>
+      </list-item>
+
+      <!-- 底部留白，防止被tabbar遮挡 -->
+      <list-item type="bottom_space" class="bottom_space"></list-item>
+    </list>
   </div>
 </template>
 
 <script>
+import router from '@system.router'
+import { quizData } from '../../../helper/quwei.js'
+
 export default {
   props: {
     isActive: {
@@ -18,11 +86,29 @@ export default {
       default: false
     }
   },
-  data() {
-    return {}
+  private: {
+    quizList: [],
+    hasPlaceholder: false
   },
   onInit() {
     console.log('<<< 趣味测评组件初始化')
+    this.initData()
+  },
+  initData() {
+    this.quizList = quizData.map(item => {
+      const randomCount = Math.floor(Math.random() * (10000 - 1000) + 1000)
+      return {
+        ...item,
+        peopleCount: randomCount
+      }
+    })
+  },
+  startTest(item) {
+    console.info('Start test:', item.title)
+    router.push({
+      uri: '/pkg_main/pages/QuWeiCePing',
+      params: { id: item.id }
+    })
   }
 }
 </script>
@@ -32,32 +118,206 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: #f7f9fc;
 }
 
-.content {
+.scroll_container {
   flex: 1;
-  flex-direction: column;
   width: 100%;
-  align-items: center;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
+  background-color: #f7f9fc;
+  padding-bottom: 64px; /* 为底部tabbar留出空间 (48px高度 + 8px底部 + 8px额外) */
+}
+
+/* 头部区域 */
+.header_item {
+  height: 140px;
+  min-height: 140px;
+  overflow: visible;
+}
+
+.header_wrapper {
+  position: relative;
+  flex-direction: column;
+  height: 140px;
+  min-height: 140px;
+  overflow: visible;
+}
+
+.bg_container {
+  width: 100%;
+  height: 110px;
+  position: relative;
 }
 
 .bg_image {
   width: 100%;
-  height: 200px;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 热门测评头部容器 */
+.hot_header_wrapper {
+  position: absolute;
+  top: 85px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.hot_header_stack {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  min-height: 40px;
+}
+
+/* 模糊背景层 - 参考 jufujizhang-19 */
+.blur_layer {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  filter: blur(7px);
+}
+
+.frost_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.9),
+    #ffffff
+  );
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* 热门测评头部内容 */
+.hot_header {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px 20px;
+  position: relative;
+  z-index: 2;
+  background-color: transparent;
+  width: 100%;
+}
+
+.hot_icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
   object-fit: contain;
 }
 
-.title_area {
+.hot_text_img {
+  width: 64px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* 列表项样式 */
+.quiz_item_wrapper {
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 0 20px;
+  margin-top: -2px; /* 消除拼接缝隙 */
+}
+
+.item_content {
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom-width: 1px;
+  border-bottom-color: #eeeeee;
+}
+
+.item_left {
+  width: 68px;
+  height: 68px;
+  margin-right: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.item_img {
   width: 100%;
-  padding: 20px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img_placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #cccccc;
+}
+
+.item_right {
+  flex: 1;
+  flex-direction: column;
+  height: 68px;
+  justify-content: space-between;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.item_title {
+  font-size: 12px;
+  color: #333333;
+  font-weight: bold;
+  lines: 2;
+  text-overflow: ellipsis;
+}
+
+.item_bottom_row {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.item_info {
+  flex-direction: row;
   align-items: center;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333333;
+.people_icon {
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  object-fit: contain;
+}
+
+.people_count {
+  font-size: 9px;
+  color: #999999;
+}
+
+.action_btn {
+  background-color: #00d3ff;
+  border-radius: 12px;
+  padding: 4px 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_text {
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.bottom_space {
+  height: 50px;
+  background-color: #ffffff;
 }
 </style>

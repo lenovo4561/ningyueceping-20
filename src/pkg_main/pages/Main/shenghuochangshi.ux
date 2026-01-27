@@ -1,16 +1,43 @@
 <template>
   <div class="page_container">
     <div class="content">
+      <!-- 顶部背景图 -->
       <image class="bg_image" src="/assets/img/shenghuochangshi-bg.png"></image>
-      <div class="title_area">
-        <text class="title">生活常识</text>
+
+      <!-- 内容层，覆盖在背景之上 -->
+      <div class="main_content">
+        <!-- 答题记录卡片 -->
+        <div class="stat_card">
+          <text class="stat_title">答题记录</text>
+          <div class="stat_row">
+            <div class="stat_item">
+              <text class="stat_num">0</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+            <div class="stat_item stat_item_middle">
+              <text class="stat_num">67%</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+            <div class="stat_item">
+              <text class="stat_num">32</text>
+              <text class="stat_label">今日答对题数</text>
+            </div>
+          </div>
+        </div>
+
+        <!-- 开始答题按钮 -->
+        <div class="start_btn" onclick="startQuiz">
+          <text class="start_text">开始答题</text>
+        </div>
       </div>
-      <!-- 内容区域，可以添加更多内容 -->
     </div>
   </div>
 </template>
 
 <script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+
 export default {
   props: {
     isActive: {
@@ -23,6 +50,11 @@ export default {
   },
   onInit() {
     console.log('<<< 生活常识组件初始化')
+  },
+  startQuiz() {
+    router.push({
+      uri: 'pkg_main/pages/ShengHuoChangShi/Quiz'
+    })
   }
 }
 </script>
@@ -32,7 +64,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: #f7f9fc;
 }
 
 .content {
@@ -40,24 +72,92 @@ export default {
   flex-direction: column;
   width: 100%;
   align-items: center;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
 }
 
 .bg_image {
   width: 100%;
-  height: 200px;
-  object-fit: contain;
+  height: 45%;
+  object-fit: cover; /* 撑满宽度，裁切高度 */
 }
 
-.title_area {
+.main_content {
   width: 100%;
-  padding: 20px;
+  flex: 1;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
 
-.title {
-  font-size: 24px;
+/* 统计卡片 */
+.stat_card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 8px;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat_title {
+  font-size: 12px;
   font-weight: bold;
   color: #333333;
+  margin-bottom: 24px;
+}
+
+.stat_row {
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.stat_item {
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  background-color: #e6f7ff;
+  border-radius: 12px;
+  padding: 15px 8px;
+  margin: 0 3px;
+  border: 2px solid #40d3ff;
+}
+
+.stat_item_middle {
+  /* 中间样式预留 */
+}
+
+.stat_num {
+  font-size: 20px;
+  color: #000000;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.stat_label {
+  font-size: 12px;
+  color: #666666;
+  text-align: center;
+}
+
+/* 开始按钮 */
+.start_btn {
+  width: 100%;
+  height: 40px;
+  background-color: #00d3ff;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.start_text {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

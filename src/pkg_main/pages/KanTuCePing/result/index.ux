@@ -1,0 +1,242 @@
+<template>
+  <div class="page_container">
+    <!-- 顶部固定区域 -->
+    <div class="top_area">
+      <image class="top_bg" src="/assets/img/tupianceshi-bg.png"></image>
+
+      <!-- 导航栏 -->
+      <div class="navbar">
+        <div class="back_btn" onclick="goBack">
+          <image class="back_icon" src="/assets/img/back.png"></image>
+        </div>
+        <text class="page_title">测试结果</text>
+      </div>
+
+      <!-- 装饰人物图 (结果页右上角有拿铅笔的人物) -->
+      <image
+        class="character_img"
+        src="/assets/img/character_pencil.png"
+      ></image>
+    </div>
+
+    <!-- 序号 Badge / 标题区 -->
+    <div class="badge_wrapper">
+      <div class="question_header_row">
+        <image class="q_icon" src="/assets/img/question_mark.png"></image>
+        <!-- 这里应该显示之前的测试标题，或者简略信息 -->
+        <text class="question_title_text">一张图测你的“内在能量类型”！</text>
+      </div>
+    </div>
+
+    <!-- 结果内容卡片 -->
+    <div class="result_card">
+      <text class="result_title">测试结果</text>
+      <text class="result_desc">{{ description }}</text>
+    </div>
+
+    <!-- 底部按钮区域 -->
+    <div class="bottom_area">
+      <div class="btn_wrapper">
+        <div class="btn_black" onclick="restartTest">
+          <text class="btn_text_white">再测一次</text>
+        </div>
+        <div class="btn_cyan" onclick="goHome">
+          <text class="btn_text_white">返回首页</text>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  protected: {
+    description: '',
+    quizId: ''
+  },
+  onInit() {
+    console.info('KanTu Result Page Init', this.description)
+    if (!this.description) {
+      this.description = '暂无测试结果'
+    }
+  },
+  goBack() {
+    router.back()
+  },
+  restartTest() {
+    // 重新测试，跳回详情页
+    router.replace({
+      uri: '/pkg_main/pages/KanTuCePing',
+      params: {
+        id: this.quizId || '1'
+      }
+    })
+  },
+  goHome() {
+    router.clear()
+    router.push({
+      uri: '/pkg_main/pages/Main'
+    })
+  }
+}
+</script>
+
+<style>
+.page_container {
+  flex-direction: column;
+  background-color: #f7f9fc;
+}
+
+.top_area {
+  width: 100%;
+  height: 180px;
+  position: relative;
+}
+
+.top_bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 10;
+  justify-content: center;
+}
+
+.back_btn {
+  position: absolute;
+  left: 15px;
+  width: 26px;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 13px;
+}
+
+.back_icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.page_title {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.character_img {
+  position: absolute;
+  top: 40px;
+  right: 15px;
+  width: 120px;
+  height: 140px;
+  object-fit: contain;
+}
+
+.badge_wrapper {
+  margin-top: -80px;
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.question_header_row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.q_icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+
+.question_title_text {
+  font-size: 13px;
+  color: #333333;
+  font-weight: bold;
+  flex: 1;
+}
+
+/* 结果卡片 */
+.result_card {
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px 40px 20px;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.result_title {
+  font-size: 16px;
+  color: #00d3ff;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.result_desc {
+  font-size: 13px;
+  color: #333333;
+  lines: 20;
+  line-height: 2;
+  text-align: justify;
+}
+
+/* 底部区域 */
+.bottom_area {
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+
+.btn_wrapper {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 240px;
+}
+
+.btn_black {
+  width: 110px;
+  height: 40px;
+  background-color: #000000;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_cyan {
+  width: 110px;
+  height: 40px;
+  background-color: #00d3ff;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_text_white {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+}
+</style>

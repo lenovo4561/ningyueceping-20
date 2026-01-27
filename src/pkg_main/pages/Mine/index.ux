@@ -1,20 +1,47 @@
 <template>
   <div class="page_container">
     <div class="content">
-      <div class="profile_header">
-        <image class="avatar" src="/assets/img/tx.png"></image>
-        <text class="username">用户名</text>
+      <!-- 顶部背景与用户信息 -->
+      <div class="header">
+        <image class="header_bg" src="/assets/img/kantuceping-bg-1.png"></image>
+        <div class="user_info">
+          <image class="avatar" src="/assets/img/tx.png"></image>
+          <div class="name_box">
+            <text class="username">冯思钗</text>
+          </div>
+        </div>
       </div>
-      
-      <div class="menu_list">
-        <div class="menu_item">
-          <text class="menu_text">我的测评记录</text>
-        </div>
-        <div class="menu_item">
-          <text class="menu_text">设置</text>
-        </div>
-        <div class="menu_item">
-          <text class="menu_text">关于我们</text>
+
+      <!-- 其他服务卡片 -->
+      <div class="card_section">
+        <div class="service_card">
+          <text class="section_title">其他服务</text>
+
+          <div class="service_list">
+            <!-- 用户协议 -->
+            <div class="list_item" onclick="openAgreement">
+              <div class="item_left">
+                <image
+                  class="item_icon"
+                  src="/assets/img/yonghuxieyi.png"
+                ></image>
+                <text class="item_text">用户协议</text>
+              </div>
+              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+            </div>
+
+            <!-- 隐私政策 -->
+            <div class="list_item" onclick="openPrivacy">
+              <div class="item_left">
+                <image
+                  class="item_icon"
+                  src="/assets/img/yinsizhengce-1.png"
+                ></image>
+                <text class="item_text">隐私政策</text>
+              </div>
+              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -37,7 +64,7 @@ import router from '@system.router'
 export default {
   data() {
     return {
-      currentIndex: 3, // 当前选中的标签索引
+      currentIndex: 3, // 当前选中的标签索引 (我的)
       tabBar: {
         color: '#999999',
         active_color: '#FFFFFF',
@@ -68,46 +95,44 @@ export default {
   },
 
   onInit() {
-    console.log('<<< 我的页面初始化，currentIndex:', this.currentIndex)
+    // 页面初始化
   },
 
-  onShow() {
-    console.info('我的页面显示')
+  openAgreement() {
+    router.push({
+      uri: 'pkg_main/pages/Web',
+      params: {
+        url:
+          'https://api.51dsp.cn/index/agreement.do?pn=com.clningyuecp.cutefunmq',
+        title: '用户协议'
+      }
+    })
+  },
+
+  openPrivacy() {
+    router.push({
+      uri: 'pkg_main/pages/Web',
+      params: {
+        url:
+          'https://api.51dsp.cn/index/privacy.do?pn=com.clningyuecp.cutefunmq',
+        title: '隐私政策'
+      }
+    })
   },
 
   _changeCurrentIndex(evt) {
     let index = evt.detail
-    console.info('切换到第' + index + '个标签')
-
-    // 如果点击的是"趣味测评"标签（index === 0），跳转到趣味测评页面
+    // 导航跳转逻辑
     if (index === 0) {
-      console.log('点击趣味测评导航，跳转到QuWeiCePing页面')
-      router.replace({
-        uri: '/pkg_main/pages/QuWeiCePing'
-      })
-      return
+      router.replace({ uri: '/pkg_main/pages/QuWeiCePing' })
+    } else if (index === 1) {
+      router.replace({ uri: '/pkg_main/pages/KanTuCePing' })
+    } else if (index === 2) {
+      router.replace({ uri: '/pkg_main/pages/ShengHuoChangShi' }) // 这里假设路由存在，此前Main被用于ShengHuoChangShi的入口
+      // 如果Main就是ShengHuoChangShi的入口，则应跳转pkg_main/pages/Main
+      // 根据之前的上下文，Main/index.ux 被用作生活常识入口
+      router.replace({ uri: '/pkg_main/pages/Main' })
     }
-
-    // 如果点击的是"看图测评"标签（index === 1），跳转到看图测评页面
-    if (index === 1) {
-      console.log('点击看图测评导航，跳转到KanTuCePing页面')
-      router.replace({
-        uri: '/pkg_main/pages/KanTuCePing'
-      })
-      return
-    }
-
-    // 如果点击的是"生活常识"标签（index === 2），跳转到生活常识页面
-    if (index === 2) {
-      console.log('点击生活常识导航，跳转到ShengHuoChangShi页面')
-      router.replace({
-        uri: '/pkg_main/pages/ShengHuoChangShi'
-      })
-      return
-    }
-
-    // 当前页面(我的)不做跳转
-    this.currentIndex = index
   }
 }
 </script>
@@ -115,56 +140,122 @@ export default {
 <style>
 .page_container {
   flex-direction: column;
-  width: 100%;
+  background-color: #f7f9fc;
   height: 100%;
-  background-color: #f5f5f5;
 }
 
 .content {
-  flex: 1;
   flex-direction: column;
+  flex: 1;
   width: 100%;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
+  padding-bottom: 60px; /* 留出底部导航空间 */
 }
 
-.profile_header {
+/* 顶部区域 */
+.header {
   width: 100%;
-  padding: 30px 20px;
-  background-color: #ffffff;
+  height: 280px;
+  position: relative;
+  padding-top: 50px;
+  padding-left: 20px;
+}
+
+.header_bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.user_info {
+  flex-direction: column;
   align-items: center;
+  width: 80px;
+  margin-top: 25px;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  margin-bottom: 10px;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+}
+
+.name_box {
+  margin-top: 8px;
+  padding: 2px 5px;
 }
 
 .username {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 15px;
   color: #333333;
+  font-weight: bold;
 }
 
-.menu_list {
+/* 其他服务卡片 */
+.card_section {
   width: 100%;
+  padding: 0 15px;
+  margin-top: -60px; /* 向上重叠 */
   flex-direction: column;
-  margin-top: 10px;
+  position: relative;
+  z-index: 2;
 }
 
-.menu_item {
+.service_card {
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 15px;
+}
+
+.section_title {
+  font-size: 16px;
+  color: #1a1a1a;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
+
+.service_list {
+  flex-direction: column;
+}
+
+.list_item {
   width: 100%;
   height: 50px;
-  background-color: #ffffff;
-  padding: 0 20px;
-  justify-content: center;
-  border-bottom-width: 1px;
-  border-color: #f0f0f0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.menu_text {
-  font-size: 16px;
+.item_left {
+  flex-direction: row;
+  align-items: center;
+}
+
+.item_icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+.item_text {
+  font-size: 14px;
   color: #333333;
+}
+
+.arrow_icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.3;
 }
 </style>

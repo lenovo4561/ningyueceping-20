@@ -1,102 +1,175 @@
 <template>
   <div class="page_container">
-    <div class="content">
-      <image class="bg_image" src="/assets/img/quweiceping-bg.png"></image>
-      <div class="title_area">
-        <text class="title">趣味测评</text>
+    <!-- 顶部固定区域 -->
+    <div class="top_area">
+      <image class="top_bg" src="/assets/img/shouyedingbg-1.png"></image>
+
+      <!-- 导航栏 -->
+      <div class="navbar">
+        <div class="back_btn" onclick="goBack">
+          <image class="back_icon" src="/assets/img/back.png"></image>
+        </div>
+        <text class="page_title">{{ quizTitle }}</text>
       </div>
-      <!-- 内容区域，可以添加更多内容 -->
+
+      <!-- 装饰人物图 -->
+      <!-- <image class="character_img" src="/assets/img/character_cow.png"></image> -->
     </div>
 
-    <!-- 底部导航栏 -->
-    <v-tabs
-      current-index="{{currentIndex}}"
-      tab-bar="{{tabBar}}"
-      @change-current-index="_changeCurrentIndex"
-    ></v-tabs>
+    <!-- 序号 Badge (层叠在背景上) -->
+    <div class="badge_wrapper">
+      <div class="badge_content">
+        <text class="badge_text">No.{{ currentQuestionIndex + 1 }}</text>
+      </div>
+    </div>
+
+    <!-- 主要内容区域 (题目和选项) -->
+    <div class="content_card">
+      <div class="question_area">
+        <text class="question_text">{{ currentQuestion.content }}</text>
+
+        <!-- 选项列表 -->
+        <div class="options_list">
+          <div
+            class="option_item {{selectedOptionIndex === index ? 'option_selected' : ''}}"
+            for="{{(index, option) in currentQuestion.options}}"
+            onclick="selectOption(index)"
+          >
+            <text class="option_text"
+              >{{ option.label }}.{{ option.text }}</text
+            >
+            <image
+              if="{{selectedOptionIndex === index}}"
+              class="check_icon"
+              src="/assets/img/v.png"
+            ></image>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部确认按钮 -->
+    <div class="bottom_area">
+      <div class="confirm_btn" onclick="onConfirm">
+        <text class="confirm_text">确定</text>
+      </div>
+    </div>
   </div>
 </template>
 
-<!-- 引入底部导航栏组件 -->
-<import name="v-tabs" src="../../components/tab/index.ux"></import>
-
 <script>
 import router from '@system.router'
+import prompt from '@system.prompt'
+import { quizData } from '../../../helper/quwei.js'
 
 export default {
-  data() {
-    return {
-      currentIndex: 0, // 当前选中的标签索引
-      tabBar: {
-        color: '#999999',
-        active_color: '#FFFFFF',
-        tabs: [
-          {
-            title: '趣味测评',
-            default_icon: '/assets/img/ceping-u.png',
-            active_icon: '/assets/img/ceping-s.png'
-          },
-          {
-            title: '看图测评',
-            default_icon: '/assets/img/kantu-u.png',
-            active_icon: '/assets/img/kantu-s.png'
-          },
-          {
-            title: '生活常识',
-            default_icon: '/assets/img/changshi-u.png',
-            active_icon: '/assets/img/changshi-s.png'
-          },
-          {
-            title: '我的',
-            default_icon: '/assets/img/mine-u.png',
-            active_icon: '/assets/img/mine-s.png'
-          }
-        ]
+  private: {
+    id: 0,
+    quizTitle: '',
+    currentQuestionIndex: 0,
+    currentQuestion: {},
+    selectedOptionIndex: -1,
+    quizItem: null,
+    totalScore: 0
+  },
+  onInit() {
+    console.info('Detail Page Init, ID:', this.id)
+    this.initData()
+  },
+  initData() {
+    const quizId = parseInt(this.id) || 1
+    // 如果 quizData 的结构不符合预期（比如是 Array），这里需要根据实际情况调整
+    // 假设 quizData 是一个数组，每个元素有 id 属性
+    this.quizItem = quizData.find(item => item.id === quizId)
+
+    if (this.quizItem) {
+      this.quizTitle = this.quizItem.title
+      this.currentQuestionIndex = 0
+      this.currentQuestion = this.quizItem.questions
+        ? this.quizItem.questions[0]
+        : {}
+    } else {
+      console.error('Quiz not found, loading first item as fallback')
+      // Fallback logic
+      if (quizData && quizData.length > 0) {
+        this.quizItem = quizData[0]
+        this.quizTitle = this.quizItem.title
+        this.currentQuestionIndex = 0
+        this.currentQuestion = this.quizItem.questions[0]
       }
     }
   },
-
-  onInit() {
-    console.log('<<< 趣味测评页面初始化，currentIndex:', this.currentIndex)
+  goBack() {
+    router.back()
   },
-
-  onShow() {
-    console.info('趣味测评页面显示')
+  selectOption(index) {
+    this.selectedOptionIndex = index
   },
-
-  _changeCurrentIndex(evt) {
-    let index = evt.detail
-    console.info('切换到第' + index + '个标签')
-
-    // 如果点击的是"看图测评"标签（index === 1），跳转到看图测评页面
-    if (index === 1) {
-      console.log('点击看图测评导航，跳转到KanTuCePing页面')
-      router.replace({
-        uri: '/pkg_main/pages/KanTuCePing'
+  onConfirm() {
+    if (this.selectedOptionIndex === -1) {
+      prompt.showToast({
+        message: '请选择一个选项'
       })
       return
     }
 
-    // 如果点击的是"生活常识"标签（index === 2），跳转到生活常识页面
-    if (index === 2) {
-      console.log('点击生活常识导航，跳转到ShengHuoChangShi页面')
-      router.replace({
-        uri: '/pkg_main/pages/ShengHuoChangShi'
-      })
+    // 累加分数
+    const currentOption = this.currentQuestion.options[this.selectedOptionIndex]
+    this.totalScore += currentOption.score || 0
+
+    // 下一题逻辑
+    if (
+      this.quizItem &&
+      this.quizItem.questions &&
+      this.currentQuestionIndex < this.quizItem.questions.length - 1
+    ) {
+      this.currentQuestionIndex++
+      this.currentQuestion = this.quizItem.questions[this.currentQuestionIndex]
+      this.selectedOptionIndex = -1
+    } else {
+      // 完成，计算结果
+      this.calculateResult()
+    }
+  },
+  calculateResult() {
+    if (!this.quizItem.conclusions) {
+      this.navigateToResult('测试完成，暂无详细结论')
       return
     }
 
-    // 如果点击的是"我的"标签（index === 3），跳转到Mine页面
-    if (index === 3) {
-      console.log('点击我的导航，跳转到Mine页面')
-      router.replace({
-        uri: '/pkg_main/pages/Mine'
-      })
-      return
+    let resultDesc = ''
+    // 查找匹配的结论
+    for (const conclusion of this.quizItem.conclusions) {
+      // 解析 "5-8分" 格式
+      const rangeStr = conclusion.scoreRange.replace('分', '')
+      if (rangeStr.indexOf('-') > -1) {
+        const range = rangeStr.split('-')
+        const min = parseInt(range[0])
+        const max = parseInt(range[1])
+        if (this.totalScore >= min && this.totalScore <= max) {
+          resultDesc = conclusion.description
+          break
+        }
+      } else {
+        // 处理可能的单值情况或者其他格式，这里暂时简单fallback
+      }
     }
 
-    // 当前页面(趣味测评)不做跳转
-    this.currentIndex = index
+    // 默认 fallback
+    if (!resultDesc && this.quizItem.conclusions.length > 0) {
+      resultDesc = this.quizItem.conclusions[0].description
+    }
+
+    this.navigateToResult(resultDesc)
+  },
+  navigateToResult(desc) {
+    router.replace({
+      uri: '/pkg_main/pages/QuWeiCePing/result',
+      params: {
+        description: desc,
+        quizId: this.id
+      }
+    })
   }
 }
 </script>
@@ -104,34 +177,174 @@ export default {
 <style>
 .page_container {
   flex-direction: column;
+  background-color: #f7f9fc;
+}
+
+.top_area {
+  width: 100%;
+  height: 120px;
+  position: relative;
+}
+
+.top_bg {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
-}
-
-.content {
-  flex: 1;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  padding-bottom: 64px; /* 为底部导航栏留出空间 (48px高度 + 8px底部间距 + 8px额外空间) */
-}
-
-.bg_image {
-  width: 100%;
-  height: 200px;
   object-fit: cover;
 }
 
-.title_area {
+.navbar {
+  position: absolute;
+  top: 15px; /* 简单的状态栏适配 */
+  left: 0;
   width: 100%;
-  padding: 20px;
+  height: 30px;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 10;
+  justify-content: center;
+}
+
+.back_btn {
+  position: absolute;
+  left: 15px;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+}
+
+.back_icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.page_title {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold;
+  lines: 1;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.character_img {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  width: 120px;
+  height: 140px;
+  object-fit: contain;
+  /* 假设有一个人物图，如果没有可以去掉或换占位符 */
+}
+
+/* 序号 Badge */
+.badge_wrapper {
+  margin-top: -40px;
+  margin-left: 16px;
+  margin-bottom: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+/* 核心内容卡片 */
+.content_card {
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 16px;
+  flex-direction: column;
+}
+
+.badge_content {
+  background-image: url('/assets/img/no-bg.png');
+  background-size: 100% 100%;
+  padding: 6px 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fallback for no-gradient support if needed, though linear-gradient is widely supported now */
+
+.badge_text {
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.question_area {
+  flex-direction: column;
+}
+
+.question_text {
+  font-size: 12px;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 16px;
+  line-height: 20px;
+}
+
+.options_list {
+  flex-direction: column;
+}
+
+.option_item {
+  width: 100%;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #f0f0f0;
+}
+
+.option_text {
+  font-size: 10px;
+  color: #666666;
+}
+
+.option_selected {
+  background-color: #e0fbfd;
+  border: 1px solid #00d3ff;
+}
+
+.check_icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+/* 底部区域 */
+.bottom_area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px 0 20px 0;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f9fc;
+}
+
+.confirm_btn {
+  width: 90%;
+  height: 48px;
+  background-color: #00d3ff;
+  border-radius: 24px;
+  justify-content: center;
   align-items: center;
 }
 
-.title {
-  font-size: 24px;
+.confirm_text {
+  color: #ffffff;
+  font-size: 14px;
   font-weight: bold;
-  color: #333333;
 }
 </style>

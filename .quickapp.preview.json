@@ -1,14 +1,6 @@
 {
   "modeOptions": {
     "current": -1,
-    "list": [
-      {
-        "name": "卡片名称4x2",
-        "pathName": "widgets/CardDemo",
-        "query": "",
-        "isCard": true,
-        "id": 0
-      }
-    ]
+    "list": []
   }
 }

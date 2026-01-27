@@ -1,0 +1,671 @@
+<template>
+  <div class="page-container">
+    <!-- 顶部背景 -->
+    <div class="top-section">
+      <image class="top-bg-img" src="/assets/img/shouyedingbg-1.png"></image>
+      <div class="header-overlay">
+        <div class="navbar">
+          <div class="nav-back_btn" onclick="goBack">
+            <image src="/assets/img/back.png" class="back-icon"></image>
+          </div>
+          <text class="nav-title">答题测试</text>
+          <div class="nav-placeholder"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+      <!-- 进度条卡片 -->
+      <div class="progress-card">
+        <div class="progress-info">
+          <div class="progress-labels">
+            <text class="progress-text-bold">第{{ currentIndex + 1 }}题</text>
+            <text class="progress-text-gray"> / 共{{ totalQuestions }}题</text>
+          </div>
+          <text class="accuracy-text">正确率: {{ accuracy }}%</text>
+        </div>
+        <div class="progress-bar-bg">
+          <div
+            class="progress-bar-fill"
+            style="width: {{progressPercent}}%;"
+          ></div>
+        </div>
+      </div>
+
+      <!-- 题目卡片 -->
+      <div class="question-card">
+        <div class="question-type-tag">
+          <text class="tag-text">单选题</text>
+        </div>
+
+        <text class="question-title">{{ currentQuestion.question }}</text>
+
+        <div class="options-list">
+          <div
+            class="option-item {{getOptionClass(index)}}"
+            for="{{(index, item) in currentQuestion.options}}"
+            onclick="selectOption(index)"
+          >
+            <text class="option-text">{{ item }}</text>
+
+            <!-- 状态图标 -->
+            <div class="status-icon-container" if="{{isSubmitted}}">
+              <div
+                class="icon-circle icon-correct"
+                if="{{index === correctOptionIndex}}"
+              >
+                <text class="icon-text">✔</text>
+              </div>
+              <!-- 选错了才显示红叉 -->
+              <div
+                class="icon-circle icon-wrong"
+                if="{{index === selectedOptionIndex && index !== correctOptionIndex}}"
+              >
+                <text class="icon-text">✘</text>
+              </div>
+            </div>
+
+            <!-- 选中状态(未提交) -->
+            <div
+              class="radio-checked"
+              if="{{!isSubmitted && index === selectedOptionIndex}}"
+            >
+              <div class="radio-inner"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 结果展示区域 (已提交显示) -->
+        <div class="result-area" if="{{isSubmitted}}">
+          <text class="result-label"
+            >正确答案:
+            <span style="color: #19be6b; font-weight: bold;">{{
+              formatOptionIndex(correctOptionIndex)
+            }}</span></text
+          >
+          <text class="result-label ml-20"
+            >你的答案:
+            <span
+              style="color: {{selectedOptionIndex === correctOptionIndex ? '#19be6b' : '#ed3f14'}}; font-weight: bold;"
+              >{{ formatOptionIndex(selectedOptionIndex) }}</span
+            ></text
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部按钮区 -->
+    <div class="bottom-area">
+      <div if="{{!isSubmitted}}" class="btn-primary" onclick="submitAnswer">
+        <text class="btn-text">确定</text>
+      </div>
+      <div if="{{isSubmitted}}" class="btn-group">
+        <div class="btn-secondary" onclick="showAnalysisDialog">
+          <text class="btn-text-secondary">查看解析</text>
+        </div>
+        <div class="btn-primary flex-1 ml-20" onclick="nextQuestion">
+          <text class="btn-text">{{
+            currentIndex === totalQuestions - 1 ? '完成测试' : '下一题'
+          }}</text>
+        </div>
+      </div>
+    </div>
+
+    <!-- 解析弹窗 (遮罩 + 内容) -->
+    <div if="{{showAnalysis}}" class="modal-mask">
+      <div class="modal-content">
+        <text class="modal-title">解析</text>
+        <div class="modal-line"></div>
+        <text class="modal-desc">{{ currentQuestion.analysis }}</text>
+        <div class="modal-btn" onclick="closeAnalysisDialog">
+          <text class="modal-btn-text">我已了解</text>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+import prompt from '@system.prompt'
+import allQuestionsDetail from '../../../../helper/shenghuo.js'
+
+export default {
+  data: {
+    allQuestions: [],
+    quizQuestions: [],
+    currentIndex: 0,
+    totalQuestions: 0,
+    correctCount: 0,
+
+    currentQuestion: {
+      question: '',
+      options: [],
+      answer: '',
+      analysis: ''
+    },
+
+    selectedOptionIndex: -1,
+    isSubmitted: false, // 是否已点确定
+    showAnalysis: false
+  },
+
+  onInit() {
+    this.initQuestions()
+  },
+
+  initQuestions() {
+    // 扁平化题目
+    let flatQuestions = []
+    if (allQuestionsDetail && allQuestionsDetail.length > 0) {
+      allQuestionsDetail.forEach(category => {
+        if (category.questions && category.questions.length > 0) {
+          flatQuestions = flatQuestions.concat(category.questions)
+        }
+      })
+    }
+
+    // 打乱并取前20
+    flatQuestions = this.shuffleArray(flatQuestions)
+    this.quizQuestions = flatQuestions.slice(0, 20)
+    this.totalQuestions = this.quizQuestions.length
+
+    if (this.totalQuestions > 0) {
+      this.loadQuestion(0)
+    } else {
+      prompt.showToast({ message: '暂无题目数据' })
+      setTimeout(() => {
+        router.back()
+      }, 1500)
+    }
+  },
+
+  shuffleArray(array) {
+    let m = array.length,
+      t,
+      i
+    while (m) {
+      i = Math.floor(Math.random() * m--)
+      t = array[m]
+      array[m] = array[i]
+      array[i] = t
+    }
+    return array
+  },
+
+  loadQuestion(index) {
+    this.currentIndex = index
+    this.currentQuestion = this.quizQuestions[index]
+    this.selectedOptionIndex = -1
+    this.isSubmitted = false
+    this.showAnalysis = false
+  },
+
+  selectOption(index) {
+    if (this.isSubmitted) return
+    this.selectedOptionIndex = index
+  },
+
+  submitAnswer() {
+    if (this.selectedOptionIndex === -1) {
+      prompt.showToast({ message: '请先选择一个答案' })
+      return
+    }
+    this.isSubmitted = true
+    // 检查正确与否
+    if (this.selectedOptionIndex === this.correctOptionIndex) {
+      this.correctCount++
+    } else {
+      // 答错自动弹出解析? 截图未明确，暂不自动弹，逻辑是手动查看
+    }
+  },
+
+  nextQuestion() {
+    if (this.currentIndex < this.totalQuestions - 1) {
+      this.loadQuestion(this.currentIndex + 1)
+    } else {
+      // 测试完成，跳转结果页
+      router.replace({
+        uri: 'pkg_main/pages/ShengHuoChangShi/Result',
+        params: {
+          score: Math.round((this.correctCount / this.totalQuestions) * 100),
+          correctCount: this.correctCount,
+          totalCount: this.totalQuestions
+        }
+      })
+    }
+  },
+
+  showAnalysisDialog() {
+    this.showAnalysis = true
+  },
+
+  closeAnalysisDialog() {
+    this.showAnalysis = false
+  },
+
+  goBack() {
+    router.back()
+  },
+
+  formatOptionIndex(index) {
+    const letters = ['A', 'B', 'C', 'D', 'E']
+    return letters[index] || ''
+  },
+
+  getOptionClass(index) {
+    if (!this.isSubmitted) {
+      return index === this.selectedOptionIndex ? 'option-selected' : ''
+    } else {
+      // 已提交
+      if (index === this.correctOptionIndex) {
+        return 'option-correct'
+      }
+      if (
+        index === this.selectedOptionIndex &&
+        index !== this.correctOptionIndex
+      ) {
+        return 'option-wrong'
+      }
+      return 'option-disabled'
+    }
+  }
+}
+</script>
+
+<computed>
+    correctOptionIndex() {
+        if (!this.currentQuestion || !this.currentQuestion.answer) return -1;
+        const map = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+        return map[this.currentQuestion.answer] || 0;
+    },
+    progressPercent() {
+        if(this.totalQuestions === 0) return 0;
+        return ((this.currentIndex + 1) / this.totalQuestions) * 100;
+    },
+    accuracy() {
+        // 计算方式：基于已做的题目。第1题若未提交显示0？
+        // 假设显示的是当前累计正确率
+        let answered = this.currentIndex;
+        let correct = this.correctCount;
+        
+        // 如果当前题已提交，计入统计
+        if (this.isSubmitted) {
+            answered += 1;
+        } 
+        
+        if (answered === 0) return 100; // 默认或100
+        return Math.round((correct / answered) * 100);
+    }
+</computed>
+
+<style>
+.page-container {
+  flex-direction: column;
+  background-color: #f5f7fa;
+  height: 100%;
+}
+
+.top-section {
+  width: 100%;
+  height: 120px;
+  position: relative;
+  flex-direction: column;
+}
+
+.top-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.header-overlay {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.navbar {
+  width: 100%;
+  height: 35px;
+  padding-top: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-back_btn {
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.back-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.nav-title {
+  font-size: 13px;
+  color: #171717;
+  font-weight: bold;
+}
+
+.nav-placeholder {
+  width: 20px;
+}
+
+.main-content {
+  flex-direction: column;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: -40px;
+  margin-bottom: 5px;
+  flex: 1;
+}
+
+/* 进度卡片 */
+.progress-card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 10px;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.progress-info {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 6px;
+}
+
+.progress-labels {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.progress-text-bold {
+  font-size: 13px;
+  color: #171717;
+  font-weight: bold;
+}
+
+.progress-text-gray {
+  font-size: 10px;
+  color: #999999;
+  margin-bottom: 2px;
+}
+
+.accuracy-text {
+  font-size: 10px;
+  color: #999999;
+  margin-bottom: 2px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 4px;
+  background-color: #ffece0;
+  border-radius: 2px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #ff9d48;
+  border-radius: 2px;
+}
+
+/* 题目卡片 */
+.question-card {
+  width: 100%;
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.question-type-tag {
+  background-color: #e6f7ff;
+  border-radius: 3px;
+  padding: 2px 6px;
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.tag-text {
+  font-size: 10px;
+  color: #0091ff;
+  font-weight: bold;
+}
+
+.question-title {
+  font-size: 14px;
+  color: #333333;
+  line-height: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.options-list {
+  flex-direction: column;
+  width: 100%;
+}
+
+.option-item {
+  width: 100%;
+  background-color: #f8f8f8;
+  border: 1px solid #f8f8f8;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option-text {
+  font-size: 12px;
+  color: #333333;
+  flex: 1;
+}
+
+.option-selected {
+  background-color: #f0fbff;
+  border-color: #00d3ff;
+}
+
+.option-correct {
+  background-color: #f0fbff;
+  border-color: #00d3ff;
+}
+
+.option-wrong {
+  background-color: #fff1f0;
+  border-color: #ff4d4f;
+}
+
+.option-disabled {
+  opacity: 1;
+}
+
+/* 单选框模拟 */
+.radio-checked {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background-color: #00d3ff;
+  justify-content: center;
+  align-items: center;
+}
+.radio-inner {
+  width: 6px;
+  height: 4px;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+  border-color: #ffffff;
+  transform: rotate(-45deg);
+  margin-top: -2px;
+}
+
+/* 状态图标 */
+.status-icon-container {
+  width: 16px;
+  height: 16px;
+  justify-content: center;
+  align-items: center;
+}
+.icon-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.icon-correct {
+  background-color: #00d3ff;
+}
+.icon-wrong {
+  background-color: #ff4d4f;
+}
+.icon-text {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* 结果区 */
+.result-area {
+  flex-direction: row;
+  margin-top: 8px;
+  padding: 4px 0;
+  align-items: center;
+}
+.result-label {
+  font-size: 11px;
+  color: #666666;
+}
+.ml-20 {
+  margin-left: 15px;
+}
+
+/* 底部区域 */
+.bottom-area {
+  width: 100%;
+  padding: 8px 10px 15px 10px;
+  background-color: #f5f7fa;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 35px;
+  background-color: #00d3ff;
+  border-radius: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-secondary {
+  width: 90px;
+  height: 35px;
+  background-color: #000000;
+  border-radius: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-group {
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.btn-text {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.btn-text-secondary {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.modal-content {
+  width: 100%;
+  background-color: #fff6e8;
+  border-radius: 10px;
+  padding: 20px 15px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #5e3b18;
+  margin-bottom: 8px;
+}
+
+.modal-line {
+  width: 30px;
+  height: 3px;
+  background-color: #dba976;
+  margin-bottom: 15px;
+  border-radius: 2px;
+}
+
+.modal-desc {
+  font-size: 12px;
+  color: #333333;
+  line-height: 18px;
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.modal-btn {
+  width: 100%;
+  height: 35px;
+  background-color: #00d3ff;
+  border-radius: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-btn-text {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+}
+</style>

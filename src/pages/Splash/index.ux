@@ -98,7 +98,8 @@ export default {
     router.push({
       uri: '/pkg_main/pages/Web',
       params: {
-        url: 'https://api.51dsp.cn/index/privacy.do?pn=com.clningyuecp.cutefunmq',
+        url:
+          'https://api.51dsp.cn/index/privacy.do?pn=com.clningyuecp.cutefunmq',
         title: '隐私政策'
       }
     })
@@ -107,7 +108,8 @@ export default {
     router.push({
       uri: '/pkg_main/pages/Web',
       params: {
-        url: 'https://api.51dsp.cn/index/agreement.do?pn=com.clningyuecp.cutefunmq',
+        url:
+          'https://api.51dsp.cn/index/agreement.do?pn=com.clningyuecp.cutefunmq',
         title: '用户协议'
       }
     })
@@ -188,33 +190,34 @@ export default {
 }
 
 .modal_content {
-  width: 139px;
+  width: 200px;
   background-color: #ffffff;
-  border-radius: 5px;
-  padding: 9px;
+  border-radius: 6px;
+  padding: 14px 12px;
   flex-direction: column;
   align-items: center;
 }
 
 .modal_title {
-  font-size: 7px;
+  font-size: 14px;
   font-weight: bold;
   color: #333333;
-  margin-bottom: 7px;
+  margin-bottom: 10px;
 }
 
 .modal_text_wrapper {
-  margin-bottom: 9px;
+  margin-bottom: 12px;
+  padding: 0;
 }
 
 .modal_text {
-  font-size: 6px;
+  font-size: 10px;
   color: #666666;
-  line-height: 9px;
+  line-height: 16px;
 }
 
 .link {
-  color: #00BCD4;
+  color: #00bcd4;
   text-decoration: underline;
 }
 
@@ -225,32 +228,32 @@ export default {
 
 .btn_primary {
   width: 100%;
-  height: 19px;
-  background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
-  border-radius: 9px;
+  height: 32px;
+  background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+  border-radius: 16px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .btn_text_primary {
   color: #ffffff;
-  font-size: 7px;
+  font-size: 12px;
   font-weight: bold;
 }
 
 .btn_secondary {
   width: 100%;
-  height: 19px;
+  height: 32px;
   background-color: #f5f7fa;
-  border-radius: 9px;
+  border-radius: 16px;
   justify-content: center;
   align-items: center;
 }
 
 .btn_text_secondary {
-  color: #00BCD4;
-  font-size: 7px;
+  color: #00bcd4;
+  font-size: 12px;
   font-weight: bold;
 }
 </style>

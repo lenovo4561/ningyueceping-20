@@ -1,0 +1,262 @@
+<template>
+  <div class="page_container">
+    <!-- 顶部固定区域 -->
+    <div class="top_area">
+      <image class="top_bg" src="/assets/img/shouyedingbg-2.png"></image>
+
+      <!-- 导航栏 -->
+      <div class="navbar">
+        <div class="back_btn" onclick="goBack">
+          <image class="back_icon" src="/assets/img/back.png"></image>
+        </div>
+        <text class="page_title">测评结论</text>
+      </div>
+
+      <!-- 装饰人物图 -->
+      <image
+        class="character_img"
+        src="/assets/img/character_result.png"
+      ></image>
+    </div>
+
+    <!-- 结果内容卡片 -->
+    <div class="result_card_wrapper">
+      <div class="result_card_stack">
+        <!-- 模糊背景层 -->
+        <div class="blur_layer"></div>
+        <!-- 白色渐变遮罩 -->
+        <div class="frost_overlay"></div>
+        <!-- 内容层 -->
+        <div class="result_card">
+          <text class="result_title">测评结论</text>
+          <text class="result_desc">{{ description }}</text>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部按钮区域 -->
+    <div class="bottom_area">
+      <div class="btn_wrapper">
+        <div class="btn_black" onclick="restartTest">
+          <text class="btn_text_white">重新测评</text>
+        </div>
+        <div class="btn_cyan" onclick="goHome">
+          <text class="btn_text_white">返回首页</text>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  protected: {
+    description: '',
+    quizId: ''
+  },
+  onInit() {
+    console.info(
+      'Result Page Init, description:',
+      this.description,
+      'quizId:',
+      this.quizId
+    )
+    // 从路由参数接收结论内容
+    if (!this.description || this.description === '') {
+      this.description = '暂无测评结果'
+    }
+  },
+  goBack() {
+    router.clear()
+    router.push({
+      uri: '/pkg_main/pages/Main'
+    })
+  },
+  restartTest() {
+    // 重新开始测评，跳转回测评页面
+    router.replace({
+      uri: '/pkg_main/pages/QuWeiCePing',
+      params: {
+        id: this.quizId || '1'
+      }
+    })
+  },
+  goHome() {
+    // 返回首页 Main/index
+    router.clear()
+    router.push({
+      uri: '/pkg_main/pages/Main'
+    })
+  }
+}
+</script>
+
+<style>
+.page_container {
+  flex-direction: column;
+  background-color: #f7f9fc;
+}
+
+.top_area {
+  width: 100%;
+  height: 110px;
+  position: relative;
+}
+
+.top_bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 44px;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 10;
+}
+
+.back_btn {
+  width: 26px;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+}
+
+.back_icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.page_title {
+  font-size: 14px;
+  color: #333333;
+  margin-left: 0px;
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
+  margin-right: 32px; /* 平衡左边返回按钮的占位，保持居中 */
+}
+
+.character_img {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  width: 100px;
+  height: 120px;
+  object-fit: contain;
+}
+
+/* 结果卡片容器 */
+.result_card_wrapper {
+  margin-left: 16px;
+  margin-right: 16px;
+  position: relative;
+  top: -20px;
+}
+
+.result_card_stack {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 模糊背景层 */
+.blur_layer {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  filter: blur(7px);
+}
+
+/* 白色渐变遮罩 */
+.frost_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.95),
+    #ffffff
+  );
+  border-radius: 20px;
+}
+
+/* 结果卡片 */
+.result_card {
+  background-color: transparent;
+  border-radius: 20px;
+  padding: 20px 20px 24px 20px;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.result_title {
+  font-size: 16px;
+  color: #00d3ff;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.result_desc {
+  font-size: 13px;
+  color: #333333;
+  lines: 20;
+  line-height: 2;
+  text-align: justify;
+}
+
+/* 底部区域 */
+.bottom_area {
+  margin-top: 20px;
+  padding-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn_wrapper {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 240px;
+}
+
+.btn_black {
+  width: 110px;
+  height: 40px;
+  background-color: #000000;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_cyan {
+  width: 110px;
+  height: 40px;
+  background-color: #00d3ff;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_text_white {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+}
+</style>

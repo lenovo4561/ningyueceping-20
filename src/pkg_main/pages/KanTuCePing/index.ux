@@ -2,7 +2,10 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/pkg_main/assets/img/tupianceshi-bg.png"></image>
+      <image
+        class="top_bg"
+        src="/pkg_main/assets/img/tupianceshi-bg.png"
+      ></image>
 
       <!-- 导航�?-->
       <div class="navbar">
@@ -13,14 +16,17 @@
       </div>
 
       <!-- 装饰人物�?-->
-      <image class="character_img" src="/pkg_main/assets/img/character_cow.png"></image>
+      <image
+        class="character_img"
+        src="/pkg_main/assets/img/character_cow.png"
+      ></image>
     </div>
 
     <!-- 序号 Badge -->
     <div class="badge_wrapper">
       <div class="question_header_row">
         <image class="q_icon" src="/pkg_main/assets/img/wenhao.png"></image>
-        <text class="question_title_text">一张图测你的“内在能量类型�?</text>
+        <text class="question_title_text">一张图测你的“内在能量类型”?</text>
       </div>
     </div>
 
@@ -75,7 +81,10 @@
         <text class="tab-text" style="color: #FFFFFF">看图测评</text>
       </div>
       <div class="tab-item" onclick="goToTab(2)">
-        <image class="tab-icon" src="/pkg_main/assets/img/changshi-u.png"></image>
+        <image
+          class="tab-icon"
+          src="/pkg_main/assets/img/changshi-u.png"
+        ></image>
         <text class="tab-text" style="color: #999999">生活常识</text>
       </div>
       <div class="tab-item" onclick="goToTab(3)">

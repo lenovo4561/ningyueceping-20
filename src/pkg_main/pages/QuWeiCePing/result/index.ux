@@ -26,22 +26,26 @@
         <div class="blur_layer"></div>
         <!-- 白色渐变遮罩 -->
         <div class="frost_overlay"></div>
-        <!-- 内容层 -->
-        <div class="result_card">
-          <text class="result_title">测评结论</text>
-          <text class="result_desc">{{ description }}</text>
-        </div>
+        <!-- 内容层 - 使用list实现滚动 -->
+        <list class="result_card">
+          <list-item type="content">
+            <div class="result_content">
+              <text class="result_title">测评结论</text>
+              <text class="result_desc">{{ description }}</text>
+            </div>
+          </list-item>
+        </list>
       </div>
     </div>
 
     <!-- 底部按钮区域 -->
     <div class="bottom_area">
       <div class="btn_wrapper">
-        <div class="btn_black" onclick="restartTest">
-          <text class="btn_text_white">重新测评</text>
+        <div class="btn_image_wrapper" onclick="restartTest">
+          <image class="btn_image" src="/assets/img/cxcp.png"></image>
         </div>
-        <div class="btn_cyan" onclick="goHome">
-          <text class="btn_text_white">返回首页</text>
+        <div class="btn_image_wrapper" onclick="goHome">
+          <image class="btn_image" src="/assets/img/fhsy.png"></image>
         </div>
       </div>
     </div>
@@ -52,7 +56,7 @@
 import router from '@system.router'
 
 export default {
-  protected: {
+  public: {
     description: '',
     quizId: ''
   },
@@ -97,6 +101,7 @@ export default {
 .page_container {
   flex-direction: column;
   background-color: #f7f9fc;
+  height: 100%;
 }
 
 .top_area {
@@ -163,6 +168,8 @@ export default {
   margin-right: 16px;
   position: relative;
   top: -20px;
+  flex: 1;
+  margin-bottom: 20px;
 }
 
 .result_card_stack {
@@ -201,10 +208,15 @@ export default {
 .result_card {
   background-color: transparent;
   border-radius: 20px;
-  padding: 20px 20px 24px 20px;
   flex-direction: column;
   position: relative;
   z-index: 2;
+  flex: 1;
+}
+
+.result_content {
+  padding: 20px 20px 24px 20px;
+  flex-direction: column;
 }
 
 .result_title {
@@ -217,15 +229,16 @@ export default {
 .result_desc {
   font-size: 13px;
   color: #333333;
-  lines: 20;
-  line-height: 2;
-  text-align: justify;
+  line-height: 24px;
+  text-align: left;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 /* 底部区域 */
 .bottom_area {
-  margin-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 30px;
   align-items: center;
   justify-content: center;
 }
@@ -258,5 +271,18 @@ export default {
   color: #ffffff;
   font-size: 13px;
   font-weight: bold;
+}
+
+.btn_image_wrapper {
+  width: 130px;
+  height: 45px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>

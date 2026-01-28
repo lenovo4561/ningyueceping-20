@@ -9,7 +9,6 @@
             <image src="/assets/img/back.png" class="back-icon"></image>
           </div>
           <text class="nav-title">答题测试</text>
-          <div class="nav-placeholder"></div>
         </div>
       </div>
     </div>
@@ -57,13 +56,12 @@
               >
                 <text class="icon-text">✔</text>
               </div>
-              <!-- 选错了才显示红叉 -->
-              <div
-                class="icon-circle icon-wrong"
+              <!-- 选错了才显示 x.png -->
+              <image
+                class="status-img-wrong"
+                src="/assets/img/x.png"
                 if="{{index === selectedOptionIndex && index !== correctOptionIndex}}"
-              >
-                <text class="icon-text">✘</text>
-              </div>
+              ></image>
             </div>
 
             <!-- 选中状态(未提交) -->
@@ -80,14 +78,14 @@
         <div class="result-area" if="{{isSubmitted}}">
           <text class="result-label"
             >正确答案:
-            <span style="color: #19be6b; font-weight: bold;">{{
+            <span style="color: #00d3ff; font-weight: bold;">{{
               formatOptionIndex(correctOptionIndex)
             }}</span></text
           >
           <text class="result-label ml-20"
             >你的答案:
             <span
-              style="color: {{selectedOptionIndex === correctOptionIndex ? '#19be6b' : '#ed3f14'}}; font-weight: bold;"
+              style="color: {{selectedOptionIndex === correctOptionIndex ? '#00d3ff' : '#FFAA00'}}; font-weight: bold;"
               >{{ formatOptionIndex(selectedOptionIndex) }}</span
             ></text
           >
@@ -116,7 +114,6 @@
     <div if="{{showAnalysis}}" class="modal-mask">
       <div class="modal-content">
         <text class="modal-title">解析</text>
-        <div class="modal-line"></div>
         <text class="modal-desc">{{ currentQuestion.analysis }}</text>
         <div class="modal-btn" onclick="closeAnalysisDialog">
           <text class="modal-btn-text">我已了解</text>
@@ -270,35 +267,34 @@ export default {
       }
       return 'option-disabled'
     }
+  },
+
+  computed: {
+    correctOptionIndex() {
+      if (!this.currentQuestion || !this.currentQuestion.answer) return -1
+      const map = { A: 0, B: 1, C: 2, D: 3 }
+      return map[this.currentQuestion.answer] || 0
+    },
+    progressPercent() {
+      if (this.totalQuestions === 0) return 0
+      return ((this.currentIndex + 1) / this.totalQuestions) * 100
+    },
+    accuracy() {
+      // 计算已答题数
+      let answered = this.currentIndex
+      let correct = this.correctCount
+
+      // 如果当前题已提交，计入统计
+      if (this.isSubmitted) {
+        answered += 1
+      }
+
+      if (answered === 0) return 0
+      return Math.round((correct / answered) * 100)
+    }
   }
 }
 </script>
-
-<computed>
-    correctOptionIndex() {
-        if (!this.currentQuestion || !this.currentQuestion.answer) return -1;
-        const map = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
-        return map[this.currentQuestion.answer] || 0;
-    },
-    progressPercent() {
-        if(this.totalQuestions === 0) return 0;
-        return ((this.currentIndex + 1) / this.totalQuestions) * 100;
-    },
-    accuracy() {
-        // 计算方式：基于已做的题目。第1题若未提交显示0？
-        // 假设显示的是当前累计正确率
-        let answered = this.currentIndex;
-        let correct = this.correctCount;
-        
-        // 如果当前题已提交，计入统计
-        if (this.isSubmitted) {
-            answered += 1;
-        } 
-        
-        if (answered === 0) return 100; // 默认或100
-        return Math.round((correct / answered) * 100);
-    }
-</computed>
 
 <style>
 .page-container {
@@ -330,37 +326,42 @@ export default {
 }
 
 .navbar {
+  position: absolute;
+  top: 15px; /* 状态栏适配 */
+  left: 0;
   width: 100%;
-  height: 35px;
-  padding-top: 10px;
-  padding-left: 8px;
-  padding-right: 8px;
+  height: 30px;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  padding: 0 15px;
+  z-index: 10;
+  justify-content: center;
 }
 
 .nav-back_btn {
+  position: absolute;
+  left: 15px;
   width: 20px;
   height: 20px;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
 }
 
 .back-icon {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
 }
 
 .nav-title {
-  font-size: 13px;
+  font-size: 14px;
   color: #171717;
   font-weight: bold;
-}
-
-.nav-placeholder {
-  width: 20px;
+  lines: 1;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 .main-content {
@@ -424,6 +425,9 @@ export default {
   height: 100%;
   background-color: #ff9d48;
   border-radius: 2px;
+  transition-property: width;
+  transition-duration: 500ms;
+  transition-timing-function: ease-out;
 }
 
 /* 题目卡片 */
@@ -493,8 +497,8 @@ export default {
 }
 
 .option-wrong {
-  background-color: #fff1f0;
-  border-color: #ff4d4f;
+  background-color: #fff8e1;
+  border-color: #ffaa00;
 }
 
 .option-disabled {
@@ -544,6 +548,12 @@ export default {
   color: #ffffff;
   font-size: 11px;
   font-weight: bold;
+}
+
+.status-img-wrong {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* 结果区 */
@@ -624,48 +634,41 @@ export default {
 
 .modal-content {
   width: 100%;
-  background-color: #fff6e8;
-  border-radius: 10px;
-  padding: 20px 15px;
+  background-color: #ffffff;
+  background: linear-gradient(to bottom, #ffcf96, #ffffff 40%);
+  border-radius: 12px;
+  padding: 20px 18px 18px 18px;
   flex-direction: column;
   align-items: center;
 }
 
 .modal-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
-  color: #5e3b18;
-  margin-bottom: 8px;
-}
-
-.modal-line {
-  width: 30px;
-  height: 3px;
-  background-color: #dba976;
-  margin-bottom: 15px;
-  border-radius: 2px;
+  color: #000000;
+  margin-bottom: 16px;
 }
 
 .modal-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: #333333;
-  line-height: 18px;
+  line-height: 20px;
   margin-bottom: 20px;
-  text-align: justify;
+  text-align: left;
 }
 
 .modal-btn {
   width: 100%;
-  height: 35px;
+  height: 38px;
   background-color: #00d3ff;
-  border-radius: 18px;
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
 }
 
 .modal-btn-text {
   color: #ffffff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
 }
 </style>

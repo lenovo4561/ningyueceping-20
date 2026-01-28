@@ -25,7 +25,7 @@
                   class="hot_icon"
                   src="/assets/img/remenceping.png"
                 ></image>
-                <text class="hot_title">热门推荐</text>
+                <image class="hot_text_img" src="/assets/img/rmcp.png"></image>
               </div>
             </div>
           </div>
@@ -43,10 +43,9 @@
           <div class="kantu_img_wrapper">
             <image
               class="kantu_img"
-              src="/assets/img/placeholder.png"
+              src="https://cdn.shijinzhuang.com/quick/nycp/ktcp/{{ item.id }}{{ item.id > 15 ? '.' : '' }}.jpg"
               alt=""
             ></image>
-            <div class="kantu_img_placeholder" if="{{!hasPlaceholder}}"></div>
           </div>
 
           <!-- 底部文字 -->
@@ -142,7 +141,7 @@ export default {
 /* 热门测评头部容器 */
 .hot_header_wrapper {
   position: absolute;
-  top: 85px;
+  top: 95px;
   left: 0;
   right: 0;
   z-index: 10;
@@ -200,7 +199,11 @@ export default {
   margin-right: 8px;
   object-fit: contain;
 }
-
+.hot_text_img {
+  width: 52px;
+  height: 16px;
+  object-fit: contain;
+}
 .hot_title {
   font-size: 16px;
   color: #333333;
@@ -230,15 +233,9 @@ export default {
 }
 
 .kantu_img {
-  width: 100%;
+  width: 200%;
   height: 100%;
-  object-fit: cover;
-}
-
-.kantu_img_placeholder {
-  width: 100%;
-  height: 100%;
-  background-color: #cccccc;
+  object-fit: fill;
 }
 
 .kantu_text_wrapper {

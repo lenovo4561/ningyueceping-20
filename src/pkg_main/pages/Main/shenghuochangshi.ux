@@ -11,16 +11,16 @@
           <text class="stat_title">答题记录</text>
           <div class="stat_row">
             <div class="stat_item">
-              <text class="stat_num">0</text>
+              <text class="stat_num">{{ todayCorrect }}</text>
               <text class="stat_label">今日答对题数</text>
             </div>
             <div class="stat_item stat_item_middle">
-              <text class="stat_num">67%</text>
-              <text class="stat_label">今日答对题数</text>
+              <text class="stat_num">{{ correctRate }}</text>
+              <text class="stat_label">答题正确率</text>
             </div>
             <div class="stat_item">
-              <text class="stat_num">32</text>
-              <text class="stat_label">今日答对题数</text>
+              <text class="stat_num">{{ totalDays }}</text>
+              <text class="stat_label">累计答题天数</text>
             </div>
           </div>
         </div>
@@ -37,6 +37,7 @@
 <script>
 import prompt from '@system.prompt'
 import router from '@system.router'
+import storage from '@system.storage'
 
 export default {
   props: {
@@ -46,10 +47,66 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      todayCorrect: 0, // 今日答对题数
+      correctRate: '0%', // 答题正确率
+      totalDays: 0 // 累计答题天数
+    }
   },
   onInit() {
     console.log('<<< 生活常识组件初始化')
+    this.loadStats()
+  },
+  onShow() {
+    console.log('<<< 生活常识组件显示，刷新数据')
+    // 每次显示时刷新数据
+    this.loadStats()
+  },
+  // 监听 isActive 属性变化
+  onPropsChange(newVal, oldVal, changedProps) {
+    if (changedProps.includes('isActive') && newVal.isActive) {
+      console.log('<<< 生活常识标签页激活，刷新数据')
+      this.loadStats()
+    }
+  },
+  loadStats() {
+    console.log('开始加载答题统计数据')
+    // 从 localStorage 读取数据
+    storage.get({
+      key: 'shcs_todayCorrect',
+      success: data => {
+        this.todayCorrect = parseInt(data) || 0
+        console.log('今日答对题数:', this.todayCorrect)
+      },
+      fail: () => {
+        this.todayCorrect = 0
+        console.log('今日答对题数: 0 (未找到数据)')
+      }
+    })
+
+    storage.get({
+      key: 'shcs_correctRate',
+      success: data => {
+        this.correctRate = data || '0%'
+        console.log('答题正确率:', this.correctRate)
+      },
+      fail: () => {
+        this.correctRate = '0%'
+        console.log('答题正确率: 0% (未找到数据)')
+      }
+    })
+
+    storage.get({
+      key: 'shcs_totalDays',
+      success: data => {
+        this.totalDays = parseInt(data) || 0
+        console.log('累计答题天数:', this.totalDays)
+      },
+      fail: () => {
+        this.totalDays = 0
+        console.log('累计答题天数: 0 (未找到数据)')
+      }
+    })
   },
   startQuiz() {
     router.push({
@@ -97,7 +154,10 @@ export default {
   width: 100%;
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 20px 8px;
+  padding-top: 10px;
+  padding-bottom: 24px;
+  padding-left: 5px;
+  padding-right: 5px;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -119,12 +179,14 @@ export default {
 .stat_item {
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   flex: 1;
   background-color: #e6f7ff;
   border-radius: 12px;
-  padding: 15px 8px;
-  margin: 0 3px;
+  padding: 15px 4px;
+  margin: 0 2px;
   border: 2px solid #40d3ff;
+  height: 80px;
 }
 
 .stat_item_middle {
@@ -132,16 +194,19 @@ export default {
 }
 
 .stat_num {
-  font-size: 20px;
+  font-size: 18px;
   color: #000000;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  line-height: 14px;
+  text-align: center;
 }
 
 .stat_label {
-  font-size: 12px;
+  font-size: 9px;
   color: #666666;
   text-align: center;
+  line-height: 14px;
 }
 
 /* 开始按钮 */
@@ -152,7 +217,7 @@ export default {
   border-radius: 30px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 
 .start_text {

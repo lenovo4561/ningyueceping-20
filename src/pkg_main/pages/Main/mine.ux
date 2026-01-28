@@ -3,7 +3,8 @@
     <div class="content">
       <!-- 顶部背景与用户信息 -->
       <div class="header">
-        <image class="header_bg" src="/assets/img/kantuceping-bg-1.png"></image>
+        <image class="header_bg" src="/assets/img/shangdian-bg2.png"></image>
+        <image class="cartoon_img" src="/assets/img/kt.png"></image>
         <div class="user_info">
           <image class="avatar" src="/assets/img/tx.png"></image>
           <div class="name_box">
@@ -92,6 +93,7 @@ export default {
   flex-direction: column;
   background-color: #f7f9fc;
   height: 100%;
+  width: 100%;
 }
 
 .content {
@@ -104,27 +106,35 @@ export default {
 /* 顶部区域 */
 .header {
   width: 100%;
-  height: 280px;
+  height: 180px;
   position: relative;
-  padding-top: 50px;
-  padding-left: 20px;
 }
 
 .header_bg {
   width: 100%;
-  height: 100%;
+  height: 180px;
+  resize-mode: cover;
   position: absolute;
   top: 0;
   left: 0;
-  object-fit: cover;
-  z-index: 0;
+}
+
+.cartoon_img {
+  width: 120px;
+  height: 150px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  resize-mode: contain;
+  z-index: 1;
 }
 
 .user_info {
   flex-direction: column;
   align-items: center;
   width: 80px;
-  margin-top: 25px;
+  margin-top: 45px;
+  margin-left: 20px;
   position: relative;
   z-index: 1;
 }
@@ -152,7 +162,7 @@ export default {
 .card_section {
   width: 100%;
   padding: 0 15px;
-  margin-top: -60px; /* 向上重叠 */
+  margin-top: -30px;
   flex-direction: column;
   position: relative;
   z-index: 2;
@@ -162,14 +172,14 @@ export default {
   flex-direction: column;
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 20px 15px;
+  padding: 10px 15px;
 }
 
 .section_title {
-  font-size: 16px;
+  font-size: 14px;
   color: #1a1a1a;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   margin-left: 5px;
 }
 
@@ -179,7 +189,7 @@ export default {
 
 .list_item {
   width: 100%;
-  height: 50px;
+  height: 38px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -191,21 +201,20 @@ export default {
 }
 
 .item_icon {
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   margin-right: 12px;
   object-fit: contain;
 }
 
 .item_text {
-  font-size: 14px;
+  font-size: 10px;
   color: #333333;
 }
 
 .arrow_icon {
-  width: 16px;
-  height: 16px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
-  opacity: 0.3;
 }
 </style>

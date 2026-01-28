@@ -9,13 +9,29 @@
             <image src="/assets/img/back.png" class="back-icon"></image>
           </div>
           <text class="nav-title">答题测试</text>
-          <div class="nav-placeholder"></div>
         </div>
       </div>
     </div>
 
     <!-- 结果内容 -->
     <div class="result-content">
+      <!-- 进度条卡片 -->
+      <div class="progress-card">
+        <div class="progress-info">
+          <div class="progress-labels">
+            <text class="progress-text-bold">第{{ currentIndex + 1 }}题</text>
+            <text class="progress-text-gray"> / 共{{ totalQuestions }}题</text>
+          </div>
+          <text class="accuracy-text">正确率: {{ accuracy }}%</text>
+        </div>
+        <div class="progress-bar-bg">
+          <div
+            class="progress-bar-fill"
+            style="width: {{progressPercent}}%;"
+          ></div>
+        </div>
+      </div>
+
       <div class="result-card">
         <text class="main-tip">你已完成全部答题，明天再来吧~</text>
 
@@ -41,6 +57,7 @@
 
 <script>
 import router from '@system.router'
+import storage from '@system.storage'
 
 export default {
   // 接收页面参数
@@ -51,27 +68,106 @@ export default {
   },
   // 内部数据
   private: {
-    displayScore: 0
+    displayScore: 0,
+    currentIndex: 0,
+    totalQuestions: 0,
+    accuracy: 0,
+    progressPercent: 0
   },
 
   onInit() {
     // 确保分数正常显示
     const s = parseInt(this.score)
     this.displayScore = isNaN(s) ? 0 : s
+
+    // 初始化进度条数据
+    this.totalQuestions = this.totalCount || 20
+    this.currentIndex = this.totalQuestions - 1
+    this.accuracy = this.displayScore
+    this.progressPercent = 100
+
     console.info(
       'Result Page onInit. Score:',
       this.score,
       'Display:',
       this.displayScore
     )
+
+    // 保存答题数据
+    this.saveQuizStats()
+  },
+
+  saveQuizStats() {
+    // 保存今日答对题数
+    storage.set({
+      key: 'shcs_todayCorrect',
+      value: String(this.correctCount || 0)
+    })
+
+    // 保存答题正确率
+    storage.set({
+      key: 'shcs_correctRate',
+      value: this.displayScore + '%'
+    })
+
+    // 更新累计答题天数
+    const today = new Date().toDateString()
+    storage.get({
+      key: 'shcs_lastAnswerDate',
+      success: data => {
+        if (data !== today) {
+          // 是新的一天，增加累计天数
+          storage.get({
+            key: 'shcs_totalDays',
+            success: daysData => {
+              const newDays = (parseInt(daysData) || 0) + 1
+              storage.set({
+                key: 'shcs_totalDays',
+                value: String(newDays)
+              })
+            },
+            fail: () => {
+              // 首次答题
+              storage.set({
+                key: 'shcs_totalDays',
+                value: '1'
+              })
+            }
+          })
+          // 更新最后答题日期
+          storage.set({
+            key: 'shcs_lastAnswerDate',
+            value: today
+          })
+        }
+      },
+      fail: () => {
+        // 首次答题
+        storage.set({
+          key: 'shcs_totalDays',
+          value: '1'
+        })
+        storage.set({
+          key: 'shcs_lastAnswerDate',
+          value: today
+        })
+      }
+    })
+
+    console.log('Quiz stats saved:', {
+      todayCorrect: this.correctCount,
+      correctRate: this.displayScore + '%'
+    })
   },
 
   goBack() {
-    router.push({ uri: 'pkg_main/pages/Main/index' })
+    router.clear()
+    router.push({ uri: '/pkg_main/pages/Main' })
   },
 
   goHome() {
-    router.push({ uri: 'pkg_main/pages/Main/index' })
+    router.clear()
+    router.push({ uri: '/pkg_main/pages/Main' })
   }
 }
 </script>
@@ -85,7 +181,7 @@ export default {
 
 .top-section {
   width: 100%;
-  height: 150px;
+  height: 110px;
   position: relative;
   flex-direction: column;
   flex-shrink: 0;
@@ -107,37 +203,42 @@ export default {
 }
 
 .navbar {
+  position: absolute;
+  top: 15px;
+  left: 0;
   width: 100%;
-  height: 50px;
-  padding-top: 15px;
-  padding-left: 10px;
-  padding-right: 10px;
+  height: 30px;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  padding: 0 15px;
+  z-index: 10;
+  justify-content: center;
 }
 
 .nav-back_btn {
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  left: 15px;
+  width: 20px;
+  height: 20px;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
 }
 
 .back-icon {
-  width: 20px;
-  height: 20px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
 }
 
 .nav-title {
-  font-size: 18px;
+  font-size: 14px;
   color: #171717;
   font-weight: bold;
-}
-
-.nav-placeholder {
-  width: 30px;
+  lines: 1;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 .result-content {
@@ -146,8 +247,8 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
   align-items: center;
-  margin-bottom: 20px;
-  margin-top: -10px;
+  margin-bottom: 5px;
+  margin-top: -50px;
   /* 让中间区域自适应，但不要强制压缩内部 */
   flex: 1;
 }
@@ -156,7 +257,7 @@ export default {
   width: 100%;
   background-color: #ffffff;
   border-radius: 12px;
-  padding: 40px 20px;
+  padding: 18px 15px 30px 15px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -164,67 +265,119 @@ export default {
 }
 
 .main-tip {
-  font-size: 16px;
+  font-size: 11px;
   color: #333333;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   text-align: center;
   font-weight: bold;
 }
 
 .score-label {
-  font-size: 14px;
+  font-size: 11px;
   color: #666666;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .score-container {
   flex-direction: row;
   align-items: baseline;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   justify-content: center;
 }
 
 .score-number {
-  font-size: 80px;
+  font-size: 60px;
   color: #00d3ff;
   font-weight: bold;
   font-family: sans-serif;
-  line-height: 80px;
+  line-height: 60px;
 }
 
 .score-percent {
-  font-size: 30px;
+  font-size: 24px;
   color: #00d3ff;
   font-weight: bold;
   margin-left: 5px;
 }
 
+/* 进度条样式 */
+.progress-card {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 10px 15px;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.progress-info {
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-labels {
+  flex-direction: row;
+}
+
+.progress-text-bold {
+  font-size: 12px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.progress-text-gray {
+  font-size: 12px;
+  color: #999999;
+}
+
+.accuracy-text {
+  font-size: 12px;
+  color: #999999;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #ffaa00;
+  border-radius: 4px;
+}
+
 .result-image {
-  width: 180px;
-  height: 180px;
+  width: 100%;
+  height: 160px;
   object-fit: contain;
-  margin-top: 10px;
+  margin-top: -20px;
   flex-shrink: 0;
 }
 
 .bottom-area {
   width: 100%;
-  padding: 20px 30px 30px 30px;
+  padding: 10px 30px 18px 30px;
   background-color: #f5f7fa;
   flex-shrink: 0;
+  align-items: center;
 }
 
 .btn-primary {
   width: 100%;
-  height: 50px;
+  height: 40px;
   background-color: #00d3ff;
-  border-radius: 25px;
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
 }
 
 .btn-text {
-  font-size: 18px;
+  font-size: 14px;
   color: #ffffff;
   font-weight: bold;
 }

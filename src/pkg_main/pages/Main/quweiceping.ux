@@ -43,7 +43,7 @@
           <div class="item_left">
             <image
               class="item_img"
-              src="/assets/img/placeholder.png"
+              src="https://cdn.shijinzhuang.com/quick/nycp/qwcp/{{ item.id }}.jpg"
               alt=""
             ></image>
             <div class="img_placeholder" if="{{!hasPlaceholder}}"></div>
@@ -158,7 +158,7 @@ export default {
 /* 热门测评头部容器 */
 .hot_header_wrapper {
   position: absolute;
-  top: 85px;
+  top: 95px;
   left: 0;
   right: 0;
   z-index: 10;
@@ -213,13 +213,13 @@ export default {
 .hot_icon {
   width: 16px;
   height: 16px;
-  margin-right: 8px;
+  margin-right: 5px;
   object-fit: contain;
 }
 
 .hot_text_img {
-  width: 64px;
-  height: 20px;
+  width: 52px;
+  height: 16px;
   object-fit: contain;
 }
 
@@ -250,9 +250,10 @@ export default {
 }
 
 .item_img {
-  width: 100%;
+  width: 200%;
   height: 100%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .img_placeholder {

@@ -18,10 +18,9 @@
 
     <!-- 序号 Badge -->
     <div class="badge_wrapper">
-      <!-- 模仿截图中的题目区域头部 -->
       <div class="question_header_row">
-        <image class="q_icon" src="/assets/img/question_mark.png"></image>
-        <text class="question_title_text">{{ quizTitle }}</text>
+        <image class="q_icon" src="/assets/img/wenhao.png"></image>
+        <text class="question_title_text">一张图测你的“内在能量类型”!</text>
       </div>
     </div>
 
@@ -42,11 +41,8 @@
       <div class="question_img_wrapper">
         <image
           class="question_img"
-          src="/assets/img/kantu_placeholder.png"
+          src="https://cdn.shijinzhuang.com/quick/nycp/ktcp/{{ id }}{{ id > 15 ? '.' : '' }}.jpg"
         ></image>
-        <div class="img_placeholder_text">
-          <text class="placeholder_label">图片占位符</text>
-        </div>
       </div>
 
       <!-- 选项列表 -->
@@ -65,6 +61,26 @@
         <div class="confirm_btn" onclick="onConfirm">
           <text class="confirm_text">查看结果</text>
         </div>
+      </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="tab-bar">
+      <div class="tab-item" onclick="goToTab(0)">
+        <image class="tab-icon" src="/assets/img/ceping-u.png"></image>
+        <text class="tab-text" style="color: #999999">趣味测评</text>
+      </div>
+      <div class="tab-item" onclick="goToTab(1)">
+        <image class="tab-icon" src="/assets/img/kantu-s.png"></image>
+        <text class="tab-text" style="color: #FFFFFF">看图测评</text>
+      </div>
+      <div class="tab-item" onclick="goToTab(2)">
+        <image class="tab-icon" src="/assets/img/changshi-u.png"></image>
+        <text class="tab-text" style="color: #999999">生活常识</text>
+      </div>
+      <div class="tab-item" onclick="goToTab(3)">
+        <image class="tab-icon" src="/assets/img/mine-u.png"></image>
+        <text class="tab-text" style="color: #999999">我的</text>
       </div>
     </div>
   </div>
@@ -120,6 +136,15 @@ export default {
   goBack() {
     router.back()
   },
+  goToTab(index) {
+    // 返回主页并切换到指定 tab
+    router.replace({
+      uri: '/pkg_main/pages/Main',
+      params: {
+        tabIndex: index
+      }
+    })
+  },
   selectOption(index) {
     this.selectedOptionIndex = index
   },
@@ -161,11 +186,12 @@ export default {
 .page_container {
   flex-direction: column;
   background-color: #f7f9fc;
+  padding-bottom: 56px;
 }
 
 .top_area {
   width: 100%;
-  height: 180px;
+  height: 140px;
   position: relative;
 }
 
@@ -216,21 +242,21 @@ export default {
 
 .character_img {
   position: absolute;
-  top: 50px;
+  top: 40px;
   right: 20px;
-  width: 100px;
-  height: 120px;
+  width: 80px;
+  height: 100px;
   object-fit: contain;
 }
 
 .badge_wrapper {
-  margin-top: -80px;
+  margin-top: -60px;
   margin-left: 16px;
   margin-right: 16px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
   flex-direction: row;
   align-items: center;
 }
@@ -248,7 +274,7 @@ export default {
 }
 
 .question_title_text {
-  font-size: 13px;
+  font-size: 10px;
   color: #333333;
   font-weight: bold;
   flex: 1;
@@ -259,15 +285,15 @@ export default {
   margin-right: 16px;
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 20px 16px;
+  padding: 12px 16px 16px 16px;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .progress_area {
   flex-direction: row;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .progress_text {
@@ -291,29 +317,30 @@ export default {
 }
 
 .question_desc {
-  font-size: 12px;
+  font-size: 10px;
   color: #333333;
   font-weight: bold;
-  margin-bottom: 12px;
-  line-height: 20px;
+  margin-bottom: 8px;
+  line-height: 18px;
 }
 
 .question_img_wrapper {
   width: 100%;
-  height: 180px;
+  height: 120px;
   border-radius: 8px;
   background-color: #f0f0f0;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   position: relative;
   justify-content: center;
   align-items: center;
 }
 
 .question_img {
-  width: 100%;
+  width: 200%;
   height: 100%;
   border-radius: 8px;
-  object-fit: cover;
+  object-fit: fill;
+  flex-shrink: 0;
 }
 
 .img_placeholder_text {
@@ -330,15 +357,15 @@ export default {
 
 .options_list {
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .option_item {
   width: 100%;
   background-color: #f7f7f7;
   border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
   border: 1px solid #f7f7f7;
 }
 
@@ -360,16 +387,49 @@ export default {
 
 .confirm_btn {
   width: 100%;
-  height: 48px;
+  height: 38px;
   background-color: #00d3ff;
-  border-radius: 24px;
+  border-radius: 19px;
   justify-content: center;
   align-items: center;
 }
 
 .confirm_text {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
+}
+
+.tab-bar {
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  height: 48px;
+  background-color: #1a1a1a;
+  border-radius: 24px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 9999;
+}
+
+.tab-item {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-bottom: 2px;
+}
+
+.tab-text {
+  font-size: 8px;
 }
 </style>

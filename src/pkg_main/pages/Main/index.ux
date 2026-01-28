@@ -79,11 +79,18 @@
 import { initUser } from '../../helper/init.js'
 
 export default {
+  protected: {
+    tabIndex: 0
+  },
   private: {
     currentIndex: 0
   },
   onInit() {
     console.log('Main page initialized')
+    // 如果有传入的 tabIndex 参数，则切换到对应的标签页
+    if (this.tabIndex !== undefined && this.tabIndex !== null) {
+      this.currentIndex = parseInt(this.tabIndex) || 0
+    }
     // 进入应用时发送初始化请求
     initUser()
   },

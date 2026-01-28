@@ -2,18 +2,18 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/assets/img/shouyedingbg-1.png"></image>
+      <image class="top_bg" src="/pkg_main/assets/img/shouyedingbg-1.png"></image>
 
       <!-- 导航栏 -->
       <div class="navbar">
         <div class="back_btn" onclick="goBack">
-          <image class="back_icon" src="/assets/img/back.png"></image>
+          <image class="back_icon" src="/pkg_main/assets/img/back.png"></image>
         </div>
         <text class="page_title">{{ quizTitle }}</text>
       </div>
 
       <!-- 装饰人物图 -->
-      <!-- <image class="character_img" src="/assets/img/character_cow.png"></image> -->
+      <!-- <image class="character_img" src="/pkg_main/assets/img/character_cow.png"></image> -->
     </div>
 
     <!-- 序号 Badge (层叠在背景上) -->
@@ -41,7 +41,7 @@
             <image
               if="{{selectedOptionIndex === index}}"
               class="check_icon"
-              src="/assets/img/v.png"
+              src="/pkg_main/assets/img/v.png"
             ></image>
           </div>
         </div>
@@ -60,7 +60,7 @@
 <script>
 import router from '@system.router'
 import prompt from '@system.prompt'
-import { quizData } from '../../../helper/quwei.js'
+import { quizData } from '../../helper/quwei.js'
 
 export default {
   private: {
@@ -127,18 +127,18 @@ export default {
       this.currentQuestion = this.quizItem.questions[this.currentQuestionIndex]
       this.selectedOptionIndex = -1
     } else {
-      // 完成，计算结果
+      // 完成，计算结�?
       this.calculateResult()
     }
   },
   calculateResult() {
     if (!this.quizItem.conclusions) {
-      this.navigateToResult('测试完成，暂无详细结论')
+      this.navigateToResult('测试完成，暂无详细结果')
       return
     }
 
     let resultDesc = ''
-    // 查找匹配的结论
+    // 查找匹配的结果
     for (const conclusion of this.quizItem.conclusions) {
       // 解析 "5-8分" 格式
       const rangeStr = conclusion.scoreRange.replace('分', '')
@@ -263,7 +263,7 @@ export default {
 }
 
 .badge_content {
-  background-image: url('/assets/img/no-bg.png');
+  background-image: url('/pkg_main/assets/img/no-bg.png');
   background-size: 95% 95%;
   background-position: center;
   background-repeat: no-repeat;

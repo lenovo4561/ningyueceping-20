@@ -2,11 +2,11 @@
   <div class="page-container">
     <!-- 顶部背景 -->
     <div class="top-section">
-      <image class="top-bg-img" src="/assets/img/shouyedingbg-1.png"></image>
+      <image class="top-bg-img" src="/pkg_main/assets/img/shouyedingbg-1.png"></image>
       <div class="header-overlay">
         <div class="navbar">
           <div class="nav-back_btn" onclick="goBack">
-            <image src="/assets/img/back.png" class="back-icon"></image>
+            <image src="/pkg_main/assets/img/back.png" class="back-icon"></image>
           </div>
           <text class="nav-title">答题测试</text>
         </div>
@@ -48,23 +48,23 @@
           >
             <text class="option-text">{{ item }}</text>
 
-            <!-- 状态图标 -->
+            <!-- 状态图�?-->
             <div class="status-icon-container" if="{{isSubmitted}}">
               <div
                 class="icon-circle icon-correct"
                 if="{{index === correctOptionIndex}}"
               >
-                <text class="icon-text">✔</text>
+                <text class="icon-text">√</text>
               </div>
               <!-- 选错了才显示 x.png -->
               <image
                 class="status-img-wrong"
-                src="/assets/img/x.png"
+                src="/pkg_main/assets/img/x.png"
                 if="{{index === selectedOptionIndex && index !== correctOptionIndex}}"
               ></image>
             </div>
 
-            <!-- 选中状态(未提交) -->
+            <!-- 选中状�?未提�? -->
             <div
               class="radio-checked"
               if="{{!isSubmitted && index === selectedOptionIndex}}"
@@ -74,7 +74,7 @@
           </div>
         </div>
 
-        <!-- 结果展示区域 (已提交显示) -->
+        <!-- 结果展示区域 (已提交显�? -->
         <div class="result-area" if="{{isSubmitted}}">
           <text class="result-label"
             >正确答案:
@@ -93,7 +93,7 @@
       </div>
     </div>
 
-    <!-- 底部按钮区 -->
+    <!-- 底部按钮�?-->
     <div class="bottom-area">
       <div if="{{!isSubmitted}}" class="btn-primary" onclick="submitAnswer">
         <text class="btn-text">确定</text>
@@ -126,7 +126,7 @@
 <script>
 import router from '@system.router'
 import prompt from '@system.prompt'
-import allQuestionsDetail from '../../../../helper/shenghuo.js'
+import allQuestionsDetail from '../../../helper/shenghuo.js'
 
 export default {
   data: {
@@ -153,7 +153,7 @@ export default {
   },
 
   initQuestions() {
-    // 扁平化题目
+    // 扁平化题�?
     let flatQuestions = []
     if (allQuestionsDetail && allQuestionsDetail.length > 0) {
       allQuestionsDetail.forEach(category => {
@@ -163,7 +163,7 @@ export default {
       })
     }
 
-    // 打乱并取前20
+    // 打乱并取�?0
     flatQuestions = this.shuffleArray(flatQuestions)
     this.quizQuestions = flatQuestions.slice(0, 20)
     this.totalQuestions = this.quizQuestions.length
@@ -210,11 +210,11 @@ export default {
       return
     }
     this.isSubmitted = true
-    // 检查正确与否
+    // 检查正确与�?
     if (this.selectedOptionIndex === this.correctOptionIndex) {
       this.correctCount++
     } else {
-      // 答错自动弹出解析? 截图未明确，暂不自动弹，逻辑是手动查看
+      // 答错自动弹出解析? 截图未明确，暂不自动弹，逻辑是手动查�?
     }
   },
 
@@ -255,7 +255,7 @@ export default {
     if (!this.isSubmitted) {
       return index === this.selectedOptionIndex ? 'option-selected' : ''
     } else {
-      // 已提交
+      // 已提�?
       if (index === this.correctOptionIndex) {
         return 'option-correct'
       }
@@ -284,7 +284,7 @@ export default {
       let answered = this.currentIndex
       let correct = this.correctCount
 
-      // 如果当前题已提交，计入统计
+      // 如果当前题已提交，计入统�?
       if (this.isSubmitted) {
         answered += 1
       }
@@ -524,7 +524,7 @@ export default {
   margin-top: -2px;
 }
 
-/* 状态图标 */
+/* 状态图�?*/
 .status-icon-container {
   width: 16px;
   height: 16px;
@@ -556,7 +556,7 @@ export default {
   object-fit: contain;
 }
 
-/* 结果区 */
+/* 结果�?*/
 .result-area {
   flex-direction: row;
   margin-top: 8px;

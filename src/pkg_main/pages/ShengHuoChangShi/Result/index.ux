@@ -2,11 +2,11 @@
   <div class="page-container">
     <!-- 顶部背景 -->
     <div class="top-section">
-      <image class="top-bg-img" src="/assets/img/shouyedingbg-5.png"></image>
+      <image class="top-bg-img" src="/pkg_main/assets/img/shouyedingbg-5.png"></image>
       <div class="header-overlay">
         <div class="navbar">
           <div class="nav-back_btn" onclick="goBack">
-            <image src="/assets/img/back.png" class="back-icon"></image>
+            <image src="/pkg_main/assets/img/back.png" class="back-icon"></image>
           </div>
           <text class="nav-title">答题测试</text>
         </div>
@@ -42,7 +42,7 @@
           <text class="score-percent">%</text>
         </div>
 
-        <image class="result-image" src="/assets/img/gongxi.png"></image>
+        <image class="result-image" src="/pkg_main/assets/img/gongxi.png"></image>
       </div>
     </div>
 
@@ -104,7 +104,7 @@ export default {
       value: String(this.correctCount || 0)
     })
 
-    // 保存答题正确率
+    // 保存答题正确�?
     storage.set({
       key: 'shcs_correctRate',
       value: this.displayScore + '%'
@@ -134,7 +134,7 @@ export default {
               })
             }
           })
-          // 更新最后答题日期
+          // 更新最后答题日�?
           storage.set({
             key: 'shcs_lastAnswerDate',
             value: today
@@ -261,7 +261,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* 不使用 flex: 1 防止被压缩，让内容决定高度，或者给个最小高度 */
+  /* 不使�?flex: 1 防止被压缩，让内容决定高度，或者给个最小高�?*/
 }
 
 .main-tip {
@@ -300,7 +300,7 @@ export default {
   margin-left: 5px;
 }
 
-/* 进度条样式 */
+/* 进度条样�?*/
 .progress-card {
   width: 100%;
   background-color: rgba(255, 255, 255, 0.85);

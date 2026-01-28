@@ -5,7 +5,7 @@
 
     <!-- Logo容器 -->
     <div class="logo-container">
-      <image class="logo" src="/assets/img/logo.png"></image>
+      <image class="logo" src="/assets/images/logo.png"></image>
     </div>
 
     <!-- 隐私协议弹窗 -->

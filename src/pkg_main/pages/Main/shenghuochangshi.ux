@@ -1,10 +1,10 @@
-<template>
+﻿<template>
   <div class="page_container">
     <div class="content">
-      <!-- 顶部背景图 -->
-      <image class="bg_image" src="/assets/img/shenghuochangshi-bg.png"></image>
+      <!-- 顶部背景�?-->
+      <image class="bg_image" src="/pkg_main/assets/img/shenghuochangshi-bg.png"></image>
 
-      <!-- 内容层，覆盖在背景之上 -->
+      <!-- 内容层，覆盖在背景之�?-->
       <div class="main_content">
         <!-- 答题记录卡片 -->
         <div class="stat_card">
@@ -62,7 +62,7 @@ export default {
     // 每次显示时刷新数据
     this.loadStats()
   },
-  // 监听 isActive 属性变化
+  // 监听 isActive 属性变�?
   onPropsChange(newVal, oldVal, changedProps) {
     if (changedProps.includes('isActive') && newVal.isActive) {
       console.log('<<< 生活常识标签页激活，刷新数据')
@@ -209,7 +209,7 @@ export default {
   line-height: 14px;
 }
 
-/* 开始按钮 */
+/* 开始按�?*/
 .start_btn {
   width: 100%;
   height: 40px;

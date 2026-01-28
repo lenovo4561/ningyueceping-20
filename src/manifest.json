@@ -76,12 +76,6 @@
       },
       "pkg_main/pages/ShengHuoChangShi/Result": {
         "component": "index"
-      },
-      "pages/Demo": {
-        "component": "index"
-      },
-      "pages/DemoDetail": {
-        "component": "index"
       }
     }
   },
@@ -130,13 +124,6 @@
       "pkg_main/pages/ShengHuoChangShi/Result": {
         "titleBar": false,
         "menu": false
-      },
-      "pages/Demo": {
-        "titleBarText": "快应用示例模版",
-        "menu": false
-      },
-      "pages/DemoDetail": {
-        "titleBarText": "详情页"
       }
     }
   },

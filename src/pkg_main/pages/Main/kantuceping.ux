@@ -1,21 +1,21 @@
-<template>
+﻿<template>
   <div class="page_container">
     <list class="scroll_container">
       <!-- 顶部背景区域 -->
       <list-item type="header" class="header_item">
         <div class="header_wrapper">
-          <!-- 背景图 -->
+          <!-- 背景�?-->
           <div class="bg_container">
             <image
               class="bg_image"
-              src="/assets/img/kantuceping-bg.png"
+              src="/pkg_main/assets/img/kantuceping-bg.png"
             ></image>
           </div>
 
           <!-- 热门推荐标题栏（带雾化效果） -->
           <div class="hot_header_wrapper">
             <div class="hot_header_stack">
-              <!-- 模糊层 -->
+              <!-- 模糊背景 -->
               <div class="blur_layer"></div>
               <!-- 白色渐变遮罩 -->
               <div class="frost_overlay"></div>
@@ -23,16 +23,16 @@
               <div class="hot_header">
                 <image
                   class="hot_icon"
-                  src="/assets/img/remenceping.png"
+                  src="/pkg_main/assets/img/remenceping.png"
                 ></image>
-                <image class="hot_text_img" src="/assets/img/rmcp.png"></image>
+                <image class="hot_text_img" src="/pkg_main/assets/img/rmcp.png"></image>
               </div>
             </div>
           </div>
         </div>
       </list-item>
 
-      <!-- 测评列表项 -->
+      <!-- 测评列表 -->
       <list-item
         type="kantu_item"
         class="kantu_item_wrapper"
@@ -64,7 +64,7 @@
 <script>
 import router from '@system.router'
 import prompt from '@system.prompt'
-import { imageQuizData } from '../../../helper/kantu.js'
+import { imageQuizData } from '../../helper/kantu.js'
 
 export default {
   props: {
@@ -210,7 +210,7 @@ export default {
   font-weight: bold;
 }
 
-/* 看图列表项样式 */
+/* 看图列表项样�?*/
 .kantu_item_wrapper {
   flex-direction: column;
   background-color: #ffffff;

@@ -2,28 +2,28 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/assets/img/tupianceshi-bg.png"></image>
+      <image class="top_bg" src="/pkg_main/assets/img/tupianceshi-bg.png"></image>
 
-      <!-- 导航栏 -->
+      <!-- 导航�?-->
       <div class="navbar">
         <div class="back_btn" onclick="goBack">
-          <image class="back_icon" src="/assets/img/back.png"></image>
+          <image class="back_icon" src="/pkg_main/assets/img/back.png"></image>
         </div>
         <text class="page_title">测试结果</text>
       </div>
 
-      <!-- 装饰人物图 (结果页右上角有拿铅笔的人物) -->
+      <!-- 装饰人物�?(结果页右上角有拿铅笔的人�? -->
       <image
         class="character_img"
-        src="/assets/img/character_pencil.png"
+        src="/pkg_main/assets/img/character_pencil.png"
       ></image>
     </div>
 
-    <!-- 序号 Badge / 标题区 -->
+    <!-- 序号 Badge / 标题�?-->
     <div class="badge_wrapper">
       <div class="question_header_row">
-        <image class="q_icon" src="/assets/img/wenhao.png"></image>
-        <!-- 这里应该显示之前的测试标题，或者简略信息 -->
+        <image class="q_icon" src="/pkg_main/assets/img/wenhao.png"></image>
+        <!-- 这里应该显示之前的测试标题，或者简略信�?-->
         <text class="question_title_text">一张图测你的“内在能量类型”！</text>
       </div>
     </div>

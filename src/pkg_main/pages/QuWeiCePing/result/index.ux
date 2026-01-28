@@ -2,31 +2,31 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/assets/img/shouyedingbg-2.png"></image>
+      <image class="top_bg" src="/pkg_main/assets/img/shouyedingbg-2.png"></image>
 
-      <!-- 导航栏 -->
+      <!-- 导航�?-->
       <div class="navbar">
         <div class="back_btn" onclick="goBack">
-          <image class="back_icon" src="/assets/img/back.png"></image>
+          <image class="back_icon" src="/pkg_main/assets/img/back.png"></image>
         </div>
         <text class="page_title">测评结论</text>
       </div>
 
-      <!-- 装饰人物图 -->
+      <!-- 装饰人物�?-->
       <image
         class="character_img"
-        src="/assets/img/character_result.png"
+        src="/pkg_main/assets/img/character_result.png"
       ></image>
     </div>
 
     <!-- 结果内容卡片 -->
     <div class="result_card_wrapper">
       <div class="result_card_stack">
-        <!-- 模糊背景层 -->
+        <!-- 模糊背景�?-->
         <div class="blur_layer"></div>
         <!-- 白色渐变遮罩 -->
         <div class="frost_overlay"></div>
-        <!-- 内容层 - 使用list实现滚动 -->
+        <!-- 内容�?- 使用list实现滚动 -->
         <list class="result_card">
           <list-item type="content">
             <div class="result_content">
@@ -42,10 +42,10 @@
     <div class="bottom_area">
       <div class="btn_wrapper">
         <div class="btn_image_wrapper" onclick="restartTest">
-          <image class="btn_image" src="/assets/img/cxcp.png"></image>
+          <image class="btn_image" src="/pkg_main/assets/img/cxcp.png"></image>
         </div>
         <div class="btn_image_wrapper" onclick="goHome">
-          <image class="btn_image" src="/assets/img/fhsy.png"></image>
+          <image class="btn_image" src="/pkg_main/assets/img/fhsy.png"></image>
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@ export default {
       'quizId:',
       this.quizId
     )
-    // 从路由参数接收结论内容
+    // 从路由参数接收结论内�?
     if (!this.description || this.description === '') {
       this.description = '暂无测评结果'
     }
@@ -79,7 +79,7 @@ export default {
     })
   },
   restartTest() {
-    // 重新开始测评，跳转回测评页面
+    // 重新开始测评，跳转回测评页�?
     router.replace({
       uri: '/pkg_main/pages/QuWeiCePing',
       params: {
@@ -178,7 +178,7 @@ export default {
   position: relative;
 }
 
-/* 模糊背景层 */
+/* 模糊背景�?*/
 .blur_layer {
   position: absolute;
   top: -12px;

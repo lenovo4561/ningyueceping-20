@@ -35,7 +35,7 @@ export default {
     return {}
   },
   clickHandler(evt) {
-    // 兼容处理：优先使用 currentTarget 获取绑定事件元素上的属性
+    // 兼容处理：优先使�?currentTarget 获取绑定事件元素上的属�?
     const attr = (evt.currentTarget && evt.currentTarget.attr) || (evt.target && evt.target.attr) || {};
     const index = attr.dataIndex !== undefined ? attr.dataIndex : attr.dataindex;
 

@@ -1,11 +1,11 @@
 <template>
   <div class="page_container">
     <div class="content">
-      <!-- 顶部背景与用户信息 -->
+      <!-- 顶部背景与用户信�?-->
       <div class="header">
-        <image class="header_bg" src="/assets/img/kantuceping-bg-1.png"></image>
+        <image class="header_bg" src="/pkg_main/assets/img/kantuceping-bg-1.png"></image>
         <div class="user_info">
-          <image class="avatar" src="/assets/img/tx.png"></image>
+          <image class="avatar" src="/pkg_main/assets/img/tx.png"></image>
           <div class="name_box">
             <text class="username">冯思钗</text>
           </div>
@@ -23,11 +23,11 @@
               <div class="item_left">
                 <image
                   class="item_icon"
-                  src="/assets/img/yonghuxieyi.png"
+                  src="/pkg_main/assets/img/yonghuxieyi.png"
                 ></image>
                 <text class="item_text">用户协议</text>
               </div>
-              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+              <image class="arrow_icon" src="/pkg_main/assets/img/jiantou.png"></image>
             </div>
 
             <!-- 隐私政策 -->
@@ -35,18 +35,18 @@
               <div class="item_left">
                 <image
                   class="item_icon"
-                  src="/assets/img/yinsizhengce-1.png"
+                  src="/pkg_main/assets/img/yinsizhengce-1.png"
                 ></image>
                 <text class="item_text">隐私政策</text>
               </div>
-              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+              <image class="arrow_icon" src="/pkg_main/assets/img/jiantou.png"></image>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 底部导航栏 -->
+    <!-- 底部导航�?-->
     <v-tabs
       current-index="{{currentIndex}}"
       tab-bar="{{tabBar}}"
@@ -55,7 +55,7 @@
   </div>
 </template>
 
-<!-- 引入底部导航栏组件 -->
+<!-- 引入底部导航栏组�?-->
 <import name="v-tabs" src="../../components/tab/index.ux"></import>
 
 <script>
@@ -64,30 +64,30 @@ import router from '@system.router'
 export default {
   data() {
     return {
-      currentIndex: 3, // 当前选中的标签索引 (我的)
+      currentIndex: 3, // 当前选中的标签索�?(我的)
       tabBar: {
         color: '#999999',
         active_color: '#FFFFFF',
         tabs: [
           {
             title: '趣味测评',
-            default_icon: '/assets/img/ceping-u.png',
-            active_icon: '/assets/img/ceping-s.png'
+            default_icon: '/pkg_main/assets/img/ceping-u.png',
+            active_icon: '/pkg_main/assets/img/ceping-s.png'
           },
           {
             title: '看图测评',
-            default_icon: '/assets/img/kantu-u.png',
-            active_icon: '/assets/img/kantu-s.png'
+            default_icon: '/pkg_main/assets/img/kantu-u.png',
+            active_icon: '/pkg_main/assets/img/kantu-s.png'
           },
           {
             title: '生活常识',
-            default_icon: '/assets/img/changshi-u.png',
-            active_icon: '/assets/img/changshi-s.png'
+            default_icon: '/pkg_main/assets/img/changshi-u.png',
+            active_icon: '/pkg_main/assets/img/changshi-s.png'
           },
           {
             title: '我的',
-            default_icon: '/assets/img/mine-u.png',
-            active_icon: '/assets/img/mine-s.png'
+            default_icon: '/pkg_main/assets/img/mine-u.png',
+            active_icon: '/pkg_main/assets/img/mine-s.png'
           }
         ]
       }
@@ -95,7 +95,7 @@ export default {
   },
 
   onInit() {
-    // 页面初始化
+    // 页面初始�?
   },
 
   openAgreement() {
@@ -128,9 +128,9 @@ export default {
     } else if (index === 1) {
       router.replace({ uri: '/pkg_main/pages/KanTuCePing' })
     } else if (index === 2) {
-      router.replace({ uri: '/pkg_main/pages/ShengHuoChangShi' }) // 这里假设路由存在，此前Main被用于ShengHuoChangShi的入口
+      router.replace({ uri: '/pkg_main/pages/ShengHuoChangShi' }) // 这里假设路由存在，此前Main被用于ShengHuoChangShi的入�?
       // 如果Main就是ShengHuoChangShi的入口，则应跳转pkg_main/pages/Main
-      // 根据之前的上下文，Main/index.ux 被用作生活常识入口
+      // 根据之前的上下文，Main/index.ux 被用作生活常识入�?
       router.replace({ uri: '/pkg_main/pages/Main' })
     }
   }

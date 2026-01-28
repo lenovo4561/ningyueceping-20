@@ -1,12 +1,12 @@
-<template>
+﻿<template>
   <div class="page_container">
     <div class="content">
-      <!-- 顶部背景与用户信息 -->
+      <!-- 顶部背景与用户信�?-->
       <div class="header">
-        <image class="header_bg" src="/assets/img/shangdian-bg2.png"></image>
-        <image class="cartoon_img" src="/assets/img/kt.png"></image>
+        <image class="header_bg" src="/pkg_main/assets/img/shangdian-bg2.png"></image>
+        <image class="cartoon_img" src="/pkg_main/assets/img/kt.png"></image>
         <div class="user_info">
-          <image class="avatar" src="/assets/img/tx.png"></image>
+          <image class="avatar" src="/pkg_main/assets/img/tx.png"></image>
           <div class="name_box">
             <text class="username">冯思钗</text>
           </div>
@@ -24,11 +24,11 @@
               <div class="item_left">
                 <image
                   class="item_icon"
-                  src="/assets/img/yonghuxieyi.png"
+                  src="/pkg_main/assets/img/yonghuxieyi.png"
                 ></image>
                 <text class="item_text">用户协议</text>
               </div>
-              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+              <image class="arrow_icon" src="/pkg_main/assets/img/jiantou.png"></image>
             </div>
 
             <!-- 隐私政策 -->
@@ -36,11 +36,11 @@
               <div class="item_left">
                 <image
                   class="item_icon"
-                  src="/assets/img/yinsizhengce-1.png"
+                  src="/pkg_main/assets/img/yinsizhengce-1.png"
                 ></image>
                 <text class="item_text">隐私政策</text>
               </div>
-              <image class="arrow_icon" src="/assets/img/jiantou.png"></image>
+              <image class="arrow_icon" src="/pkg_main/assets/img/jiantou.png"></image>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default {
     return {}
   },
   onInit() {
-    // 页面初始化
+    // 页面初始�?
   },
   openAgreement() {
     router.push({

@@ -1,4 +1,4 @@
-<import name="quweiceping-page" src="./quweiceping.ux"></import>
+﻿<import name="quweiceping-page" src="./quweiceping.ux"></import>
 <import name="kantuceping-page" src="./kantuceping.ux"></import>
 <import name="shenghuochangshi-page" src="./shenghuochangshi.ux"></import>
 <import name="mine-page" src="./mine.ux"></import>
@@ -30,7 +30,7 @@
       <div class="tab-item" onclick="clickTab(0)">
         <image
           class="tab-icon"
-          src="{{currentIndex === 0 ? '/assets/img/ceping-s.png' : '/assets/img/ceping-u.png'}}"
+          src="{{currentIndex === 0 ? '/pkg_main/assets/img/ceping-s.png' : '/pkg_main/assets/img/ceping-u.png'}}"
         ></image>
         <text
           class="tab-text"
@@ -41,7 +41,7 @@
       <div class="tab-item" onclick="clickTab(1)">
         <image
           class="tab-icon"
-          src="{{currentIndex === 1 ? '/assets/img/kantu-s.png' : '/assets/img/kantu-u.png'}}"
+          src="{{currentIndex === 1 ? '/pkg_main/assets/img/kantu-s.png' : '/pkg_main/assets/img/kantu-u.png'}}"
         ></image>
         <text
           class="tab-text"
@@ -52,7 +52,7 @@
       <div class="tab-item" onclick="clickTab(2)">
         <image
           class="tab-icon"
-          src="{{currentIndex === 2 ? '/assets/img/changshi-s.png' : '/assets/img/changshi-u.png'}}"
+          src="{{currentIndex === 2 ? '/pkg_main/assets/img/changshi-s.png' : '/pkg_main/assets/img/changshi-u.png'}}"
         ></image>
         <text
           class="tab-text"
@@ -63,7 +63,7 @@
       <div class="tab-item" onclick="clickTab(3)">
         <image
           class="tab-icon"
-          src="{{currentIndex === 3 ? '/assets/img/mine-s.png' : '/assets/img/mine-u.png'}}"
+          src="{{currentIndex === 3 ? '/pkg_main/assets/img/mine-s.png' : '/pkg_main/assets/img/mine-u.png'}}"
         ></image>
         <text
           class="tab-text"
@@ -87,7 +87,7 @@ export default {
   },
   onInit() {
     console.log('Main page initialized')
-    // 如果有传入的 tabIndex 参数，则切换到对应的标签页
+    // 如果有传入的 tabIndex 参数，则切换到对应的标签�?
     if (this.tabIndex !== undefined && this.tabIndex !== null) {
       this.currentIndex = parseInt(this.tabIndex) || 0
     }

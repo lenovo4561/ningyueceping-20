@@ -2,29 +2,29 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/assets/img/tupianceshi-bg.png"></image>
+      <image class="top_bg" src="/pkg_main/assets/img/tupianceshi-bg.png"></image>
 
-      <!-- 导航栏 -->
+      <!-- 导航�?-->
       <div class="navbar">
         <div class="back_btn" onclick="goBack">
-          <image class="back_icon" src="/assets/img/back.png"></image>
+          <image class="back_icon" src="/pkg_main/assets/img/back.png"></image>
         </div>
         <text class="page_title">图片测试</text>
       </div>
 
-      <!-- 装饰人物图 -->
-      <image class="character_img" src="/assets/img/character_cow.png"></image>
+      <!-- 装饰人物�?-->
+      <image class="character_img" src="/pkg_main/assets/img/character_cow.png"></image>
     </div>
 
     <!-- 序号 Badge -->
     <div class="badge_wrapper">
       <div class="question_header_row">
-        <image class="q_icon" src="/assets/img/wenhao.png"></image>
-        <text class="question_title_text">一张图测你的“内在能量类型”!</text>
+        <image class="q_icon" src="/pkg_main/assets/img/wenhao.png"></image>
+        <text class="question_title_text">一张图测你的“内在能量类型�?</text>
       </div>
     </div>
 
-    <!-- 主要内容区域 (进度条 + 题目图片 + 选项) -->
+    <!-- 主要内容区域 (进度�?+ 题目图片 + 选项) -->
     <div class="content_card">
       <div class="progress_area">
         <text class="progress_text"
@@ -64,22 +64,22 @@
       </div>
     </div>
 
-    <!-- 底部导航栏 -->
+    <!-- 底部导航�?-->
     <div class="tab-bar">
       <div class="tab-item" onclick="goToTab(0)">
-        <image class="tab-icon" src="/assets/img/ceping-u.png"></image>
+        <image class="tab-icon" src="/pkg_main/assets/img/ceping-u.png"></image>
         <text class="tab-text" style="color: #999999">趣味测评</text>
       </div>
       <div class="tab-item" onclick="goToTab(1)">
-        <image class="tab-icon" src="/assets/img/kantu-s.png"></image>
+        <image class="tab-icon" src="/pkg_main/assets/img/kantu-s.png"></image>
         <text class="tab-text" style="color: #FFFFFF">看图测评</text>
       </div>
       <div class="tab-item" onclick="goToTab(2)">
-        <image class="tab-icon" src="/assets/img/changshi-u.png"></image>
+        <image class="tab-icon" src="/pkg_main/assets/img/changshi-u.png"></image>
         <text class="tab-text" style="color: #999999">生活常识</text>
       </div>
       <div class="tab-item" onclick="goToTab(3)">
-        <image class="tab-icon" src="/assets/img/mine-u.png"></image>
+        <image class="tab-icon" src="/pkg_main/assets/img/mine-u.png"></image>
         <text class="tab-text" style="color: #999999">我的</text>
       </div>
     </div>
@@ -89,7 +89,7 @@
 <script>
 import router from '@system.router'
 import prompt from '@system.prompt'
-import { imageQuizData } from '../../../helper/kantu.js'
+import { imageQuizData } from '../../helper/kantu.js'
 
 export default {
   protected: {
@@ -118,9 +118,9 @@ export default {
       }
 
       if (quizId === 3) {
-        this.questionImage = '/assets/img/kantu_stars.png'
+        this.questionImage = '/pkg_main/assets/img/kantu_stars.png'
       } else {
-        this.questionImage = '/assets/img/kantu_q' + quizId + '.png'
+        this.questionImage = '/pkg_main/assets/img/kantu_q' + quizId + '.png'
       }
     } else {
       if (imageQuizData && imageQuizData.length > 0) {

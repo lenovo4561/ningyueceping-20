@@ -379,9 +379,14 @@ export default {
       return
     }
 
+    // 开始新一天的答题，累计天数+1
+    this.totalDays++
+    storage.set({ key: 'shcs_totalDays', value: String(this.totalDays) })
+
     // 共有10个分类，每天一个分类，循环展示
     const totalCategories = allQuestionsDetail.length // 10个分类
-    const categoryIndex = this.totalDays % totalCategories // 根据累计天数取模确定分类
+    // 注意：因为已经+1了，所以这里用 (totalDays - 1) 来确定分类
+    const categoryIndex = (this.totalDays - 1) % totalCategories
 
     // 获取今日分类的题目
     const todayCategory = allQuestionsDetail[categoryIndex]
@@ -489,9 +494,7 @@ export default {
 
     // 如果是第10题（最后一题）且已提交，标记今日完成
     if (this.currentIndex === 9) {
-      // 最后一题提交后，累计答题天数+1
-      this.totalDays++
-      storage.set({ key: 'shcs_totalDays', value: String(this.totalDays) })
+      // 最后一题提交后，标记今日完成（累计天数已在开始答题时+1）
       storage.set({ key: 'shcs_quizCompleted', value: 'true' })
       storage.set({ key: 'shcs_currentIndex', value: '10' }) // 标记已完成所有题目
     }

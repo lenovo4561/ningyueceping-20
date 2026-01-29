@@ -2,11 +2,17 @@
   <div class="page-container">
     <!-- 顶部背景 -->
     <div class="top-section">
-      <image class="top-bg-img" src="/pkg_main/assets/img/shouyedingbg-5.png"></image>
+      <image
+        class="top-bg-img"
+        src="/pkg_main/assets/img/shouyedingbg-5.png"
+      ></image>
       <div class="header-overlay">
         <div class="navbar">
           <div class="nav-back_btn" onclick="goBack">
-            <image src="/pkg_main/assets/img/back.png" class="back-icon"></image>
+            <image
+              src="/pkg_main/assets/img/back.png"
+              class="back-icon"
+            ></image>
           </div>
           <text class="nav-title">答题测试</text>
         </div>
@@ -42,7 +48,10 @@
           <text class="score-percent">%</text>
         </div>
 
-        <image class="result-image" src="/pkg_main/assets/img/gongxi.png"></image>
+        <image
+          class="result-image"
+          src="/pkg_main/assets/img/gongxi.png"
+        ></image>
       </div>
     </div>
 
@@ -104,59 +113,18 @@ export default {
       value: String(this.correctCount || 0)
     })
 
-    // 保存答题正确�?
+    // 保存答题正确率
     storage.set({
       key: 'shcs_correctRate',
       value: this.displayScore + '%'
     })
 
-    // 更新累计答题天数
-    const today = new Date().toDateString()
-    storage.get({
-      key: 'shcs_lastAnswerDate',
-      success: data => {
-        if (data !== today) {
-          // 是新的一天，增加累计天数
-          storage.get({
-            key: 'shcs_totalDays',
-            success: daysData => {
-              const newDays = (parseInt(daysData) || 0) + 1
-              storage.set({
-                key: 'shcs_totalDays',
-                value: String(newDays)
-              })
-            },
-            fail: () => {
-              // 首次答题
-              storage.set({
-                key: 'shcs_totalDays',
-                value: '1'
-              })
-            }
-          })
-          // 更新最后答题日�?
-          storage.set({
-            key: 'shcs_lastAnswerDate',
-            value: today
-          })
-        }
-      },
-      fail: () => {
-        // 首次答题
-        storage.set({
-          key: 'shcs_totalDays',
-          value: '1'
-        })
-        storage.set({
-          key: 'shcs_lastAnswerDate',
-          value: today
-        })
-      }
-    })
-
+    // 注意：累计答题天数已在Quiz页面的startNewQuiz()中更新
+    // Result页面只负责保存答题结果，不再管理累计天数
     console.log('Quiz stats saved:', {
       todayCorrect: this.correctCount,
-      correctRate: this.displayScore + '%'
+      correctRate: this.displayScore + '%',
+      totalDays: this.totalDays || 0
     })
   },
 

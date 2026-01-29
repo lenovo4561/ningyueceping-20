@@ -1,7 +1,7 @@
 <template>
   <div class="splash-container">
     <!-- 背景图 -->
-    <image class="bg-image" src="/assets/img/loading-bg.png"></image>
+    <image class="bg-image" src="/pkg_main/assets/img/loading-bg.png"></image>
 
     <!-- Logo容器 -->
     <div class="logo-container">

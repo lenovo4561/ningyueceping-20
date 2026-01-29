@@ -25,7 +25,10 @@
                   class="hot_icon"
                   src="/pkg_main/assets/img/remenceping.png"
                 ></image>
-                <image class="hot_text_img" src="/pkg_main/assets/img/rmcp.png"></image>
+                <image
+                  class="hot_text_img"
+                  src="/pkg_main/assets/img/rmcp.png"
+                ></image>
               </div>
             </div>
           </div>
@@ -55,7 +58,10 @@
 
             <div class="item_bottom_row">
               <div class="item_info">
-                <image class="people_icon" src="/pkg_main/assets/img/renshu.png"></image>
+                <image
+                  class="people_icon"
+                  src="/pkg_main/assets/img/renshu.png"
+                ></image>
                 <text class="people_count"
                   >{{ item.peopleCount }} 人在测试</text
                 >
@@ -250,7 +256,7 @@ export default {
 }
 
 .item_img {
-  width: 200%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
   flex-shrink: 0;

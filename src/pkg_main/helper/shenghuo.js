@@ -1227,7 +1227,4 @@ const lifeKnowledgeQuestions = [
   }
 ]
 
-// 导出模块（若需在模块化环境中使用）
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = lifeKnowledgeQuestions
-}
+export { lifeKnowledgeQuestions }

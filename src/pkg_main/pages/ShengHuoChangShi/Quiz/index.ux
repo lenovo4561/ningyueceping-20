@@ -2,11 +2,17 @@
   <div class="page-container">
     <!-- 顶部背景 -->
     <div class="top-section">
-      <image class="top-bg-img" src="/pkg_main/assets/img/shouyedingbg-1.png"></image>
+      <image
+        class="top-bg-img"
+        src="/pkg_main/assets/img/shouyedingbg-1.png"
+      ></image>
       <div class="header-overlay">
         <div class="navbar">
           <div class="nav-back_btn" onclick="goBack">
-            <image src="/pkg_main/assets/img/back.png" class="back-icon"></image>
+            <image
+              src="/pkg_main/assets/img/back.png"
+              class="back-icon"
+            ></image>
           </div>
           <text class="nav-title">答题测试</text>
         </div>
@@ -126,15 +132,17 @@
 <script>
 import router from '@system.router'
 import prompt from '@system.prompt'
-import allQuestionsDetail from '../../../helper/shenghuo.js'
+import storage from '@system.storage'
+import { lifeKnowledgeQuestions as allQuestionsDetail } from '../../../helper/shenghuo.js'
 
 export default {
   data: {
     allQuestions: [],
     quizQuestions: [],
     currentIndex: 0,
-    totalQuestions: 0,
+    totalQuestions: 10, // 每天固定10道题
     correctCount: 0,
+    totalDays: 0, // 累计答题天数
 
     currentQuestion: {
       question: '',
@@ -144,31 +152,262 @@ export default {
     },
 
     selectedOptionIndex: -1,
-    isSubmitted: false, // 是否已点确定
+    isSubmitted: false,
     showAnalysis: false
   },
 
   onInit() {
-    this.initQuestions()
+    this.checkTodayProgress()
   },
 
-  initQuestions() {
-    // 扁平化题�?
-    let flatQuestions = []
-    if (allQuestionsDetail && allQuestionsDetail.length > 0) {
-      allQuestionsDetail.forEach(category => {
-        if (category.questions && category.questions.length > 0) {
-          flatQuestions = flatQuestions.concat(category.questions)
+  onHide() {
+    // 页面隐藏时保存进度（包括答对题数和正确率）
+    this.saveCurrentProgress()
+  },
+
+  onDestroy() {
+    // 页面销毁时保存进度
+    this.saveCurrentProgress()
+  },
+
+  // 保存当前完整进度（包括答对题数、正确率等）
+  saveCurrentProgress() {
+    // 如果还有未完成的题目，保存当前进度
+    if (
+      this.currentIndex < 10 &&
+      this.quizQuestions &&
+      this.quizQuestions.length > 0
+    ) {
+      // 计算当前正确率（基于已答题数）
+      const answeredCount = this.currentIndex // 当前索引就是已答题数
+      if (answeredCount > 0) {
+        const rate = Math.round((this.correctCount / answeredCount) * 100)
+        storage.set({
+          key: 'shcs_todayCorrect',
+          value: String(this.correctCount)
+        })
+        storage.set({ key: 'shcs_correctRate', value: rate + '%' })
+      }
+    }
+  },
+
+  // 检查今日答题进度
+  checkTodayProgress() {
+    const today = new Date().toDateString()
+    storage.get({
+      key: 'shcs_quizDate',
+      success: dateData => {
+        if (dateData === today) {
+          // 今天已有答题记录，检查是否完成
+          storage.get({
+            key: 'shcs_quizCompleted',
+            success: completedData => {
+              if (completedData === 'true') {
+                // 今日已完成，跳转结果页
+                this.loadTodayResult()
+              } else {
+                // 今日未完成，恢复进度继续答题
+                this.loadProgress()
+              }
+            },
+            fail: () => {
+              this.loadProgress()
+            }
+          })
+        } else {
+          // 新的一天，开始新的答题
+          this.startNewQuiz()
         }
-      })
+      },
+      fail: () => {
+        // 没有记录，开始新的答题
+        this.startNewQuiz()
+      }
+    })
+  },
+
+  // 加载今日已完成的结果
+  loadTodayResult() {
+    storage.get({
+      key: 'shcs_todayCorrect',
+      success: correctData => {
+        const correctCount = parseInt(correctData) || 0
+        storage.get({
+          key: 'shcs_totalDays',
+          success: daysData => {
+            const totalDays = parseInt(daysData) || 1
+            router.replace({
+              uri: 'pkg_main/pages/ShengHuoChangShi/Result',
+              params: {
+                score: Math.round((correctCount / 10) * 100),
+                correctCount: correctCount,
+                totalCount: 10,
+                totalDays: totalDays
+              }
+            })
+          },
+          fail: () => {
+            router.replace({
+              uri: 'pkg_main/pages/ShengHuoChangShi/Result',
+              params: {
+                score: Math.round((correctCount / 10) * 100),
+                correctCount: correctCount,
+                totalCount: 10,
+                totalDays: 1
+              }
+            })
+          }
+        })
+      },
+      fail: () => {
+        this.startNewQuiz()
+      }
+    })
+  },
+
+  // 恢复答题进度
+  loadProgress() {
+    storage.get({
+      key: 'shcs_quizQuestions',
+      success: questionsData => {
+        try {
+          const savedQuestions = JSON.parse(questionsData)
+
+          // 验证数据格式
+          if (
+            !Array.isArray(savedQuestions) ||
+            savedQuestions.length === 0 ||
+            !savedQuestions[0].question
+          ) {
+            console.log('存储数据格式错误，重新开始')
+            this.clearStorageAndStart()
+            return
+          }
+
+          this.quizQuestions = savedQuestions
+          this.totalQuestions = 10
+
+          storage.get({
+            key: 'shcs_currentIndex',
+            success: indexData => {
+              this.currentIndex = parseInt(indexData) || 0
+
+              storage.get({
+                key: 'shcs_correctCount',
+                success: correctData => {
+                  this.correctCount = parseInt(correctData) || 0
+
+                  storage.get({
+                    key: 'shcs_totalDays',
+                    success: daysData => {
+                      this.totalDays = parseInt(daysData) || 0
+                      this.loadQuestion(this.currentIndex)
+                    },
+                    fail: () => {
+                      this.totalDays = 0
+                      this.loadQuestion(this.currentIndex)
+                    }
+                  })
+                },
+                fail: () => {
+                  this.correctCount = 0
+                  this.loadQuestion(this.currentIndex)
+                }
+              })
+            },
+            fail: () => {
+              this.loadQuestion(0)
+            }
+          })
+        } catch (e) {
+          console.log('解析存储数据失败:', e)
+          this.clearStorageAndStart()
+        }
+      },
+      fail: () => {
+        this.startNewQuiz()
+      }
+    })
+  },
+
+  // 清空存储并重新开始
+  clearStorageAndStart() {
+    const keys = [
+      'shcs_quizDate',
+      'shcs_quizQuestions',
+      'shcs_currentIndex',
+      'shcs_correctCount',
+      'shcs_quizCompleted',
+      'shcs_categoryIndex'
+    ]
+    keys.forEach(key => {
+      storage.delete({ key })
+    })
+    this.startNewQuiz()
+  },
+
+  // 开始新的一天答题
+  startNewQuiz() {
+    const today = new Date().toDateString()
+
+    // 获取累计答题天数，用于确定今天展示哪个分类
+    storage.get({
+      key: 'shcs_totalDays',
+      success: daysData => {
+        this.totalDays = parseInt(daysData) || 0
+        this.initTodayCategory(today)
+      },
+      fail: () => {
+        this.totalDays = 0
+        this.initTodayCategory(today)
+      }
+    })
+  },
+
+  // 根据累计天数选择今日分类
+  initTodayCategory(today) {
+    // 检查数据是否加载成功
+    if (
+      !allQuestionsDetail ||
+      !Array.isArray(allQuestionsDetail) ||
+      allQuestionsDetail.length === 0
+    ) {
+      prompt.showToast({ message: '题目数据加载失败' })
+      setTimeout(() => {
+        router.back()
+      }, 1500)
+      return
     }
 
-    // 打乱并取�?0
-    flatQuestions = this.shuffleArray(flatQuestions)
-    this.quizQuestions = flatQuestions.slice(0, 20)
-    this.totalQuestions = this.quizQuestions.length
+    // 共有10个分类，每天一个分类，循环展示
+    const totalCategories = allQuestionsDetail.length // 10个分类
+    const categoryIndex = this.totalDays % totalCategories // 根据累计天数取模确定分类
 
-    if (this.totalQuestions > 0) {
+    // 获取今日分类的题目
+    const todayCategory = allQuestionsDetail[categoryIndex]
+
+    if (
+      todayCategory &&
+      todayCategory.questions &&
+      todayCategory.questions.length > 0
+    ) {
+      // 打乱该分类的题目顺序
+      this.quizQuestions = this.shuffleArray([...todayCategory.questions])
+      this.totalQuestions = this.quizQuestions.length // 应该是10道
+      this.currentIndex = 0
+      this.correctCount = 0
+
+      // 保存今日日期、分类索引和题目
+      storage.set({ key: 'shcs_quizDate', value: today })
+      storage.set({ key: 'shcs_categoryIndex', value: String(categoryIndex) })
+      storage.set({
+        key: 'shcs_quizQuestions',
+        value: JSON.stringify(this.quizQuestions)
+      })
+      storage.set({ key: 'shcs_currentIndex', value: '0' })
+      storage.set({ key: 'shcs_correctCount', value: '0' })
+      storage.set({ key: 'shcs_quizCompleted', value: 'false' })
+
       this.loadQuestion(0)
     } else {
       prompt.showToast({ message: '暂无题目数据' })
@@ -192,8 +431,23 @@ export default {
   },
 
   loadQuestion(index) {
+    if (!this.quizQuestions || this.quizQuestions.length === 0) {
+      prompt.showToast({ message: '题目加载失败' })
+      return
+    }
+
+    if (index < 0 || index >= this.quizQuestions.length) {
+      return
+    }
+
+    const question = this.quizQuestions[index]
+    if (!question) {
+      prompt.showToast({ message: '题目数据异常' })
+      return
+    }
+
     this.currentIndex = index
-    this.currentQuestion = this.quizQuestions[index]
+    this.currentQuestion = question
     this.selectedOptionIndex = -1
     this.isSubmitted = false
     this.showAnalysis = false
@@ -210,17 +464,53 @@ export default {
       return
     }
     this.isSubmitted = true
-    // 检查正确与�?
+
+    // 检查正确与否
     if (this.selectedOptionIndex === this.correctOptionIndex) {
       this.correctCount++
-    } else {
-      // 答错自动弹出解析? 截图未明确，暂不自动弹，逻辑是手动查�?
     }
+
+    // 计算并保存当前正确率和答对题数（实时更新）
+    const currentAnswered = this.currentIndex + 1 // 已答题数
+    const rate = Math.round((this.correctCount / currentAnswered) * 100)
+    storage.set({ key: 'shcs_todayCorrect', value: String(this.correctCount) })
+    storage.set({ key: 'shcs_correctRate', value: rate + '%' })
+
+    // 保存答对题数
+    storage.set({ key: 'shcs_correctCount', value: String(this.correctCount) })
+
+    // 如果不是最后一题，保存下一题的索引（用户下次从下一题开始）
+    if (this.currentIndex < 9) {
+      storage.set({
+        key: 'shcs_currentIndex',
+        value: String(this.currentIndex + 1)
+      })
+    }
+
+    // 如果是第10题（最后一题）且已提交，标记今日完成
+    if (this.currentIndex === 9) {
+      // 最后一题提交后，累计答题天数+1
+      this.totalDays++
+      storage.set({ key: 'shcs_totalDays', value: String(this.totalDays) })
+      storage.set({ key: 'shcs_quizCompleted', value: 'true' })
+      storage.set({ key: 'shcs_currentIndex', value: '10' }) // 标记已完成所有题目
+    }
+  },
+
+  // 保存答题进度（仅在特殊情况下调用）
+  saveProgress() {
+    storage.set({ key: 'shcs_currentIndex', value: String(this.currentIndex) })
+    storage.set({ key: 'shcs_correctCount', value: String(this.correctCount) })
   },
 
   nextQuestion() {
     if (this.currentIndex < this.totalQuestions - 1) {
       this.loadQuestion(this.currentIndex + 1)
+      // 保存新的题目位置
+      storage.set({
+        key: 'shcs_currentIndex',
+        value: String(this.currentIndex)
+      })
     } else {
       // 测试完成，跳转结果页
       router.replace({
@@ -228,7 +518,8 @@ export default {
         params: {
           score: Math.round((this.correctCount / this.totalQuestions) * 100),
           correctCount: this.correctCount,
-          totalCount: this.totalQuestions
+          totalCount: this.totalQuestions,
+          totalDays: this.totalDays
         }
       })
     }
@@ -243,7 +534,20 @@ export default {
   },
 
   goBack() {
-    router.back()
+    // 退出时保存进度（如果今日未完成）
+    storage.get({
+      key: 'shcs_quizCompleted',
+      success: completedData => {
+        if (completedData !== 'true') {
+          this.saveProgress()
+        }
+        router.back()
+      },
+      fail: () => {
+        this.saveProgress()
+        router.back()
+      }
+    })
   },
 
   formatOptionIndex(index) {
@@ -255,7 +559,6 @@ export default {
     if (!this.isSubmitted) {
       return index === this.selectedOptionIndex ? 'option-selected' : ''
     } else {
-      // 已提�?
       if (index === this.correctOptionIndex) {
         return 'option-correct'
       }
@@ -280,17 +583,12 @@ export default {
       return ((this.currentIndex + 1) / this.totalQuestions) * 100
     },
     accuracy() {
-      // 计算已答题数
       let answered = this.currentIndex
-      let correct = this.correctCount
-
-      // 如果当前题已提交，计入统�?
       if (this.isSubmitted) {
         answered += 1
       }
-
       if (answered === 0) return 0
-      return Math.round((correct / answered) * 100)
+      return Math.round((this.correctCount / answered) * 100)
     }
   }
 }

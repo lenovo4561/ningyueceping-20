@@ -2,7 +2,10 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/pkg_main/assets/img/shouyedingbg-1.png"></image>
+      <image
+        class="top_bg"
+        src="/pkg_main/assets/img/shouyedingbg-1.png"
+      ></image>
 
       <!-- 导航栏 -->
       <div class="navbar">
@@ -63,8 +66,10 @@ import prompt from '@system.prompt'
 import { quizData } from '../../helper/quwei.js'
 
 export default {
+  protected: {
+    id: 0
+  },
   private: {
-    id: 0,
     quizTitle: '',
     currentQuestionIndex: 0,
     currentQuestion: {},

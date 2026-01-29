@@ -2,8 +2,8 @@
 const imageQuizData = [
   {
     id: 1,
-    title: '第一眼暴露你的生活态度！',
-    question: '从这张图片中，你最先注意到什么？',
+    title: '从这张图片中，你最先注意到什么？',
+    question: '请从以下选项中选择你最先注意到的元素：',
     options: [
       { label: 'A', text: '半杯冒着热气的红茶' },
       { label: 'B', text: '打盹的橘猫' },
@@ -35,8 +35,8 @@ const imageQuizData = [
   },
   {
     id: 2,
-    title: '超准视觉测评：藏在画面里的真实特质',
-    question: '超准视觉测评：图中最先出现的事物，藏着你的真实特质',
+    title: '超准视觉测评：图中最先出现的事物，藏着你的真实特质',
+    question: '请凭直觉从以下选项中选择你最先注意到的事物：',
     options: [
       { label: 'A', text: '一只展翅的白色飞鸟' },
       { label: 'B', text: '两朵相靠的粉色花朵' },
@@ -68,8 +68,8 @@ const imageQuizData = [
   },
   {
     id: 3,
-    title: '一张图测你的“内在能量类型”',
-    question: '一张图测你的 “内在能量类型”！凭直觉选出你最先注意到的事物：',
+    title: '一张图测你的“内在能量类型”！',
+    question: '凭直觉选出你最先注意到的事物：',
     options: [
       { label: 'A', text: '发光的星星' },
       { label: 'B', text: '沉闷的黑色乌云' },
@@ -101,8 +101,8 @@ const imageQuizData = [
   },
   {
     id: 4,
-    title: '窗台图暴露你的隐藏特质',
-    question: '第一眼暴露你的隐藏特质！这张窗台图，你先看到啥？',
+    title: '第一眼暴露你的隐藏特质！这张窗台图，你先看到啥？',
+    question: '请从以下选项中选择你最先注意到的事物：',
     options: [
       { label: 'A', text: '半杯冒着热气的奶茶' },
       { label: 'B', text: '摊开的绘本' },
@@ -134,8 +134,8 @@ const imageQuizData = [
   },
   {
     id: 5,
-    title: '雨夜街角图测你潜意识渴望的温暖',
-    question: '盯着这张雨夜街角图 3 秒！测你潜意识里最渴望的温暖是什么',
+    title: '盯着这张雨夜街角图 3 秒！测你潜意识里最渴望的温暖是什么',
+    question: '请从以下选项中选择你最先注意到的事物：',
     options: [
       { label: 'A', text: '亮着暖光的便利店' },
       { label: 'B', text: '被遗忘的黑色雨伞' },
@@ -167,8 +167,8 @@ const imageQuizData = [
   },
   {
     id: 6,
-    title: '巷弄细节测你藏在心底的小期待',
-    question: '巷弄里的 4 个细节，你先注意到哪个？看穿你藏在心底的小期待',
+    title: '巷弄里的4个细节，你先注意到哪个？看穿你藏在心底的小期待',
+    question: '巷弄里的4个细节，你先注意到哪个？看穿你藏在心底的小期待',
     options: [
       { label: 'A', text: '早餐铺的白色热气' },
       { label: 'B', text: '老槐树上的新绿' },
@@ -200,7 +200,7 @@ const imageQuizData = [
   },
   {
     id: 7,
-    title: '夏夜庭院图测你内心小渴望',
+    title: '夏夜庭院图：先见哪处？测你内心小渴望',
     question: '夏夜庭院图：先见哪处？测你内心小渴望',
     options: [
       { label: 'A', text: '葡萄架上的串灯' },
@@ -233,7 +233,7 @@ const imageQuizData = [
   },
   {
     id: 8,
-    title: '秋日书店测试：暴露你的感情向往',
+    title: '秋日书店测试：第一眼盯啥？暴露特质',
     question: '秋日书店测试：第一眼盯啥？暴露特质',
     options: [
       { label: 'A', text: '蜷缩在沙发里的读者' },
@@ -266,7 +266,7 @@ const imageQuizData = [
   },
   {
     id: 9,
-    title: '雪景图测你的近期感情状态',
+    title: '这张雪景图：选心动处，测近期状态',
     question: '这张雪景图：选心动处，测近期状态',
     options: [
       { label: 'A', text: '雪道上滑行的人' },
@@ -299,7 +299,7 @@ const imageQuizData = [
   },
   {
     id: 10,
-    title: '春日花田测你藏在春光里的小期待',
+    title: '春日花田哪处先入眼？测你藏在春光里的小期待',
     question: '春日花田哪处先入眼？测你藏在春光里的小期待',
     options: [
       { label: 'A', text: '牵手散步的情侣' },
@@ -332,7 +332,7 @@ const imageQuizData = [
   },
   {
     id: 11,
-    title: '雨雾便利店测你的情绪小缺口',
+    title: '雨雾便利店第一眼盯啥？暴露你的情绪小缺口',
     question: '雨雾便利店第一眼盯啥？暴露你的情绪小缺口',
     options: [
       { label: 'A', text: '排队结账的男生' },
@@ -365,7 +365,7 @@ const imageQuizData = [
   },
   {
     id: 12,
-    title: '篝火露营测你藏在日常里的小期待',
+    title: '篝火露营细节 pick！测你藏在日常里的小期待',
     question: '篝火露营细节 pick！测你藏在日常里的小期待',
     options: [
       { label: 'A', text: '围坐篝火的人群' },
@@ -398,7 +398,7 @@ const imageQuizData = [
   },
   {
     id: 13,
-    title: '图书馆画面测你近期需要的小宁静',
+    title: '选图书馆最戳你的帧！测近期需要的小宁静',
     question: '选图书馆最戳你的帧！测近期需要的小宁静',
     options: [
       { label: 'A', text: '靠窗看书的男生' },
@@ -431,7 +431,7 @@ const imageQuizData = [
   },
   {
     id: 14,
-    title: '夏日海滩测你藏的小活力',
+    title: '夏日海滩细节测试：先见啥？知你藏的小活力',
     question: '夏日海滩细节测试：先见啥？知你藏的小活力',
     options: [
       { label: 'A', text: '躺椅上享受阳光的人' },
@@ -464,7 +464,7 @@ const imageQuizData = [
   },
   {
     id: 15,
-    title: '秋日街头测你藏在烟火里的小柔软',
+    title: '秋日街头哪幕先暖到你？测你藏在烟火里的小柔软',
     question: '秋日街头哪幕先暖到你？测你藏在烟火里的小柔软',
     options: [
       { label: 'A', text: '面包店的橱窗' },
@@ -497,7 +497,7 @@ const imageQuizData = [
   },
   {
     id: 16,
-    title: '落樱画面暴露你的浪漫小偏好',
+    title: '落樱画面第一眼落哪处？暴露你的浪漫小偏好',
     question: '落樱画面第一眼落哪处？暴露你的浪漫小偏好',
     options: [
       { label: 'A', text: '甜品店的樱花蛋糕' },
@@ -530,7 +530,7 @@ const imageQuizData = [
   },
   {
     id: 17,
-    title: '咖啡馆画面测你的爱情感知偏好',
+    title: '咖啡馆画面第一眼落哪？暴露你的爱情感知偏',
     question: '咖啡馆画面第一眼落哪？暴露你的爱情感知偏',
     options: [
       { label: 'A', text: '爱心拉花的拿铁' },
@@ -563,7 +563,7 @@ const imageQuizData = [
   },
   {
     id: 18,
-    title: '花房初遇测你当下的心动方向',
+    title: '花房初遇：先见啥？知你当下的心动方向',
     question: '花房初遇：先见啥？知你当下的心动方向',
     options: [
       { label: 'A', text: '包装好的向日葵' },
@@ -596,7 +596,7 @@ const imageQuizData = [
   },
   {
     id: 19,
-    title: '暖红房画面测近期需要的陪伴感',
+    title: '选暖红房最戳的画面！测近期需要的陪伴感',
     question: '选暖红房最戳的画面！测近期需要的陪伴感',
     options: [
       { label: 'A', text: '情侣马克杯' },
@@ -629,7 +629,7 @@ const imageQuizData = [
   },
   {
     id: 20,
-    title: '秋日银杏细节测你藏的温柔特质',
+    title: '秋日银杏细节 pick！测你藏的温柔特质',
     question: '秋日银杏细节 pick！测你藏的温柔特质',
     options: [
       { label: 'A', text: '后座的女生' },

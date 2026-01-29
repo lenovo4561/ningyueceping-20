@@ -1,10 +1,13 @@
 <template>
   <div class="page_container">
     <div class="content">
-      <!-- 顶部背景�?-->
-      <image class="bg_image" src="/pkg_main/assets/img/shenghuochangshi-bg.png"></image>
+      <!-- 顶部背景�?-->
+      <image
+        class="bg_image"
+        src="/pkg_main/assets/img/shenghuochangshi-bg.png"
+      ></image>
 
-      <!-- 内容层，覆盖在背景之�?-->
+      <!-- 内容层，覆盖在背景之�?-->
       <div class="main_content">
         <!-- 答题记录卡片 -->
         <div class="stat_card">
@@ -25,14 +28,14 @@
           </div>
         </div>
 
-        <!-- 开始答题按�?-->
+        <!-- 开始答题按钮 -->
         <div class="start_btn" onclick="startQuiz">
-          <text class="start_text">开始答�?/text>
+          <text class="start_text">开始答题</text>
         </div>
       </div>
     </div>
 
-    <!-- 底部导航�?-->
+    <!-- 底部导航�?-->
     <v-tabs
       current-index="{{currentIndex}}"
       tab-bar="{{tabBar}}"
@@ -41,7 +44,7 @@
   </div>
 </template>
 
-<!-- 引入底部导航栏组�?-->
+<!-- 引入底部导航栏组�?-->
 <import name="v-tabs" src="../../components/tab/index.ux"></import>
 
 <script>
@@ -51,7 +54,7 @@ import prompt from '@system.prompt'
 export default {
   data() {
     return {
-      currentIndex: 2, // 当前选中的标签索�?
+      currentIndex: 2, // 当前选中的标签索�?
       tabBar: {
         color: '#999999',
         active_color: '#FFFFFF',
@@ -97,9 +100,9 @@ export default {
 
   _changeCurrentIndex(evt) {
     let index = evt.detail
-    console.info('切换到第' + index + '个标�?)
+    console.info('切换到第' + index + '个标�?)
 
-    // 如果点击的是"趣味测评"标签（index === 0），跳转到趣味测评页�?
+    // 如果点击的是"趣味测评"标签（index === 0），跳转到趣味测评页�?
     if (index === 0) {
       console.log('点击趣味测评导航，跳转到QuWeiCePing页面')
       router.replace({
@@ -108,7 +111,7 @@ export default {
       return
     }
 
-    // 如果点击的是"看图测评"标签（index === 1），跳转到看图测评页�?
+    // 如果点击的是"看图测评"标签（index === 1），跳转到看图测评页�?
     if (index === 1) {
       console.log('点击看图测评导航，跳转到KanTuCePing页面')
       router.replace({
@@ -161,7 +164,7 @@ export default {
   width: 100%;
   padding-left: 20px;
   padding-right: 20px;
-  margin-top: 420px; /* 根据背景图人物位置调整，确保卡片显示在人物下�?*/
+  margin-top: 420px; /* 根据背景图人物位置调整，确保卡片显示在人物下�?*/
   flex-direction: column;
   align-items: center;
 }
@@ -175,7 +178,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  /* 阴影效果在快应用中支持有限，主要靠背景色和圆�?*/
+  /* 阴影效果在快应用中支持有限，主要靠背景色和圆�?*/
 }
 
 .stat_title {
@@ -203,7 +206,7 @@ export default {
 }
 
 .stat_item_middle {
-  /* 中间可能特殊样式，暂时不需�?*/
+  /* 中间可能特殊样式，暂时不需�?*/
 }
 
 .stat_num {
@@ -218,7 +221,7 @@ export default {
   color: #666666;
 }
 
-/* 开始按�?*/
+/* 开始按�?*/
 .start_btn {
   width: 100%;
   height: 54px;
@@ -226,7 +229,7 @@ export default {
   border-radius: 27px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 80px; /* 防止被底部导航遮�?*/
+  margin-bottom: 80px; /* 防止被底部导航遮�?*/
 }
 
 .start_text {

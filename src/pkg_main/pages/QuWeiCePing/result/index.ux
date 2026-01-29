@@ -2,9 +2,12 @@
   <div class="page_container">
     <!-- 顶部固定区域 -->
     <div class="top_area">
-      <image class="top_bg" src="/pkg_main/assets/img/shouyedingbg-2.png"></image>
+      <image
+        class="top_bg"
+        src="/pkg_main/assets/img/shouyedingbg-2.png"
+      ></image>
 
-      <!-- 导航�?-->
+      <!-- 导航�?-->
       <div class="navbar">
         <div class="back_btn" onclick="goBack">
           <image class="back_icon" src="/pkg_main/assets/img/back.png"></image>
@@ -12,7 +15,7 @@
         <text class="page_title">测评结论</text>
       </div>
 
-      <!-- 装饰人物�?-->
+      <!-- 装饰人物�?-->
       <image
         class="character_img"
         src="/pkg_main/assets/img/character_result.png"
@@ -22,11 +25,11 @@
     <!-- 结果内容卡片 -->
     <div class="result_card_wrapper">
       <div class="result_card_stack">
-        <!-- 模糊背景�?-->
+        <!-- 模糊背景�?-->
         <div class="blur_layer"></div>
         <!-- 白色渐变遮罩 -->
         <div class="frost_overlay"></div>
-        <!-- 内容�?- 使用list实现滚动 -->
+        <!-- 内容�?- 使用list实现滚动 -->
         <list class="result_card">
           <list-item type="content">
             <div class="result_content">
@@ -67,7 +70,7 @@ export default {
       'quizId:',
       this.quizId
     )
-    // 从路由参数接收结论内�?
+    // 从路由参数接收结论内�?
     if (!this.description || this.description === '') {
       this.description = '暂无测评结果'
     }
@@ -79,7 +82,7 @@ export default {
     })
   },
   restartTest() {
-    // 重新开始测评，跳转回测评页�?
+    // 重新开始测评，跳转回测评页�?
     router.replace({
       uri: '/pkg_main/pages/QuWeiCePing',
       params: {
@@ -178,7 +181,7 @@ export default {
   position: relative;
 }
 
-/* 模糊背景�?*/
+/* 模糊背景�?*/
 .blur_layer {
   position: absolute;
   top: -12px;
@@ -220,16 +223,16 @@ export default {
 }
 
 .result_title {
-  font-size: 16px;
+  font-size: 13px;
   color: #00d3ff;
   font-weight: bold;
   margin-bottom: 12px;
 }
 
 .result_desc {
-  font-size: 13px;
+  font-size: 11px;
   color: #333333;
-  line-height: 24px;
+  line-height: 30px;
   text-align: left;
   word-break: break-word;
   white-space: pre-wrap;
@@ -246,7 +249,7 @@ export default {
 .btn_wrapper {
   flex-direction: row;
   justify-content: space-between;
-  width: 240px;
+  width: 85%;
 }
 
 .btn_black {
@@ -274,8 +277,8 @@ export default {
 }
 
 .btn_image_wrapper {
-  width: 130px;
-  height: 45px;
+  width: 48%;
+  height: 55px;
   justify-content: center;
   align-items: center;
 }

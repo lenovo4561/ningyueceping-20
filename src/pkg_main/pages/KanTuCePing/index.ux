@@ -26,7 +26,7 @@
     <div class="badge_wrapper">
       <div class="question_header_row">
         <image class="q_icon" src="/pkg_main/assets/img/wenhao.png"></image>
-        <text class="question_title_text">一张图测你的“内在能量类型”?</text>
+        <text class="question_title_text">{{ quizTitle }}</text>
       </div>
     </div>
 
@@ -34,7 +34,7 @@
     <div class="content_card">
       <div class="progress_area">
         <text class="progress_text"
-          ><span style="color:#ff7500; font-weight:bold;">1</span>/1</text
+          ><span style="color:#ff7500; font-weight:bold;">1</span>/2</text
         >
         <div class="progress_bar_bg">
           <div class="progress_bar_fill"></div>
@@ -259,7 +259,7 @@ export default {
 }
 
 .badge_wrapper {
-  margin-top: -60px;
+  margin-top: -40px;
   margin-left: 16px;
   margin-right: 16px;
   background-color: rgba(255, 255, 255, 0.9);
@@ -303,6 +303,7 @@ export default {
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
+  padding-top: 10px;
 }
 
 .progress_text {
@@ -345,10 +346,10 @@ export default {
 }
 
 .question_img {
-  width: 200%;
+  width: 100%;
   height: 100%;
   border-radius: 8px;
-  object-fit: fill;
+  object-fit: cover;
   flex-shrink: 0;
 }
 
